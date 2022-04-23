@@ -12,8 +12,8 @@ In development...
   - This new extended version ... 
   
 
-<!-- ## Project Showcase -->
-
+## Project Showcase
+...
 
 
 ## Technologies:
