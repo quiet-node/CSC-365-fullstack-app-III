@@ -12,8 +12,8 @@ import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.BusinessModel;
 
+
 public class RestService {
-    
     /**
      * A function to get the similar businesses to the target business
      * @param allBusinesses
@@ -47,7 +47,7 @@ public class RestService {
         Map<String, List<BusinessModel>> clusters = new KMeans().initializeClusers(businessBtree, new Random().nextInt(10)+5);
         if (clusters == null) 
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-
+        
         return clusters;
     }
 

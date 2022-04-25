@@ -11,9 +11,9 @@ import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.BusinessModel;
 
 @Getter
-public class JsonService {
+public class JsonService{
     BusinessBtree businessBtree = new BusinessBtree(64);
-    
+
     /**
      * Initialize a B-tree
      * @param PATH the path to the file
@@ -26,13 +26,13 @@ public class JsonService {
             BufferedReader br = new BufferedReader(reader);
             String line = "";
 
-
             // loop through the json file
             for (int i = 0; i < 10000; i++) {
                 // each line of the file is a json object
                 line = br.readLine();
-
-                JSONObject bData = new JSONObject(line); // this is the whole Object for the whole line
+    
+                // this is the whole Object for the whole line
+                JSONObject bData = new JSONObject(line); 
                 
                 // attributes
                 String name = bData.get("name").toString();
@@ -49,7 +49,6 @@ public class JsonService {
 
                 // get the values for categories-key and push them into an array
                 String[] categories = bData.get("categories").toString().split(",");
-                // String categoriesString = bData.get("categories").toString();
 
                 // add each category value to bCategories list
                 for (int j =0; j<categories.length; j++) {
