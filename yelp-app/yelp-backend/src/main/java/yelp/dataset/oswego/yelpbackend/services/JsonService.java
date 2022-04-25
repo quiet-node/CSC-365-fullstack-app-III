@@ -40,6 +40,8 @@ public class JsonService {
                 String address = bData.get("address").toString();
                 Double stars = bData.getDouble("stars");
                 Double reviews = bData.getDouble("review_count");
+                Double longitude = bData.getDouble("longitude");
+                Double latitude = bData.getDouble("latitude");
                 Double similarityRate = -9999.0;
 
                 // A list of string for categories
@@ -55,7 +57,7 @@ public class JsonService {
                 }
 
                 // Init a BusinessModel instance
-                BusinessModel bModel = new BusinessModel(i, business_id, name, address, stars, reviews, similarityRate, bCategories);
+                BusinessModel bModel = new BusinessModel(i, business_id, name, address, stars, reviews, similarityRate, longitude, latitude, bCategories);
                 
                 // add to businessBrree
                 businessBtree.insert(bModel);

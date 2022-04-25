@@ -20,7 +20,7 @@ public class BusinessModel implements Comparable<BusinessModel>, Serializable {
     @Id
     private long id;
     private String  business_id, name, address;
-    private double stars, reviews, similarityRate;
+    private double stars, reviews, similarityRate, longitude, latitude;
     private ArrayList<String> categories;
 
     public BusinessModel(long id) {
