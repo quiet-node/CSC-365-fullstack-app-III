@@ -11,4 +11,10 @@ public class BusinessGNode {
     int attribute;
     List<BusinessGNode> links;
 
+    boolean canReach(BusinessGNode destination) {
+        if (this == destination) return true;
+        for (BusinessGNode node : links) 
+            if (node.canReach(destination)) return true;
+        return false;
+    }
 }
