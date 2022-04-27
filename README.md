@@ -35,9 +35,9 @@ In development...
 
 ## Resources
 ### Version 3.0
-  - [Union-find for disjoin set](https://docs.google.com/document/d/1vL7tjxZzut8Cl7L2KYfp9S8DlFDHnWCG4Gwekg8vRWQ/edit#heading=h.m17n12tmqn83)
-  - [Union-find for disjoint set 2](https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/)
-  - [Union-find for disjoint set 3](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
+  - [Union-find for disjoin set -- course's notes](https://docs.google.com/document/d/1vL7tjxZzut8Cl7L2KYfp9S8DlFDHnWCG4Gwekg8vRWQ/edit#heading=h.m17n12tmqn83)
+  - [Union-find for disjoint set 2 -- hackerearth](https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/)
+  - [Union-find for disjoint set 3 -- cp-alogorithm](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
 
 ### Version 2.0
   - [Yelp Dataset](https://www.yelp.com/dataset)
