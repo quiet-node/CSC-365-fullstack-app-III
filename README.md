@@ -33,9 +33,18 @@ In development...
   - Tailwindcss
   - Material-UI
 
-### Resources
+## Resources
+### Version 3.0
+  - [Union-find for disjoin set -- course's notes](https://docs.google.com/document/d/1vL7tjxZzut8Cl7L2KYfp9S8DlFDHnWCG4Gwekg8vRWQ/edit#heading=h.m17n12tmqn83)
+  - [Union-find for disjoint set 2 -- hackerearth](https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/)
+  - [Union-find for disjoint set 3 -- cp-alogorithm](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
+
+### Version 2.0
   - [Yelp Dataset](https://www.yelp.com/dataset)
   - [Btree - Geeksforgeeks](https://www.geeksforgeeks.org/insert-operation-in-b-tree/) 
   - [K-Means - Baeldung](https://www.baeldung.com/java-k-means-clustering-algorithm)
   - [D3 - Data-driven Document](https://observablehq.com/@d3/d3-hierarchy?collection=@d3/d3-hierarchy)
+
+### Version 1.0
+  - ...
   
