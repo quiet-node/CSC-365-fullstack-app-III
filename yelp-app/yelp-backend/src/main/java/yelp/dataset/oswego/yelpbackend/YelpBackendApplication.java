@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @SpringBootApplication
 @Component
 public class YelpBackendApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(YelpBackendApplication.class, args);
 	}
