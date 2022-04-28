@@ -7,7 +7,7 @@ import java.util.Random;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import yelp.dataset.oswego.yelpbackend.models.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 
 @Data
 @NoArgsConstructor

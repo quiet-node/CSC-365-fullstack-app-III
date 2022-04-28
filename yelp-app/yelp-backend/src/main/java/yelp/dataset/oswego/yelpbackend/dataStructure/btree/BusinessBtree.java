@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import lombok.Getter;
-import yelp.dataset.oswego.yelpbackend.models.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 
 /** 
 *   POJO will be wiped off by garbge collector after a running session

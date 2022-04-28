@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.algorithms.clustering;
+package yelp.dataset.oswego.yelpbackend.models.centroidModels;
 
 import java.util.ArrayList;
 

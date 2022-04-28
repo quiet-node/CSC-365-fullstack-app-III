@@ -4,10 +4,11 @@ import java.util.*;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
-import yelp.dataset.oswego.yelpbackend.models.BusinessD3ChildrenModel;
-import yelp.dataset.oswego.yelpbackend.models.BusinessD3Model;
-import yelp.dataset.oswego.yelpbackend.models.BusinessD3RootModel;
-import yelp.dataset.oswego.yelpbackend.models.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.centroidModels.Centroid;
+import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3ChildrenModel;
+import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3Model;
+import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3RootModel;
 
 public class KMeans {
 

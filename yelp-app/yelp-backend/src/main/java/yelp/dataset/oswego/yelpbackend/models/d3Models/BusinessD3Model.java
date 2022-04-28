@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.models;
+package yelp.dataset.oswego.yelpbackend.models.d3Models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
