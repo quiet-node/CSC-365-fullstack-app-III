@@ -36,16 +36,18 @@ In development...
 ## Resources
 ### Version 3.0
   - [Union-find for disjoin set -- course's notes](https://docs.google.com/document/d/1vL7tjxZzut8Cl7L2KYfp9S8DlFDHnWCG4Gwekg8vRWQ/edit#heading=h.m17n12tmqn83)
-  - [Union-find for disjoint set 2 -- hackerearth](https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/)
-  - [Union-find for disjoint set 3 -- cp-alogorithm](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
-  - [Kraskal's Algorithm](https://cp-algorithms.com/graph/mst_kruskal.html)
-  - [MST and Kraskal's Algorithm](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html)
+  - [Union-find for disjoint set -- hackerearth](https://www.hackerearth.com/practice/notes/disjoint-set-union-union-find/)
+  - [Union-find for disjoint set -- cp-algo](https://cp-algorithms.com/data_structures/disjoint_set_union.html)
+  - [Union-find for disjoint set -- geeksforgeeks](https://www.geeksforgeeks.org/disjoint-set-data-structures/)
+  - [Kraskal's Algorithm -- cp-algo](https://cp-algorithms.com/graph/mst_kruskal.html)
+  - [MST and Kraskal's Algorithm -- cp-algo](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html)
+  - [Haversine implementation -- geeksforgeeks](https://www.geeksforgeeks.org/haversine-formula-to-find-distance-between-two-points-on-a-sphere/)
 
 ### Version 2.0
-  - [Yelp Dataset](https://www.yelp.com/dataset)
-  - [Btree - Geeksforgeeks](https://www.geeksforgeeks.org/insert-operation-in-b-tree/) 
-  - [K-Means - Baeldung](https://www.baeldung.com/java-k-means-clustering-algorithm)
-  - [D3 - Data-driven Document](https://observablehq.com/@d3/d3-hierarchy?collection=@d3/d3-hierarchy)
+  - [Yelp Dataset -- yelp](https://www.yelp.com/dataset)
+  - [Btree -- Geeksforgeeks](https://www.geeksforgeeks.org/insert-operation-in-b-tree/) 
+  - [K-Means -- Baeldung](https://www.baeldung.com/java-k-means-clustering-algorithm)
+  - [D3 -- Data-driven Document](https://observablehq.com/@d3/d3-hierarchy?collection=@d3/d3-hierarchy)
 
 ### Version 1.0
   - ...
