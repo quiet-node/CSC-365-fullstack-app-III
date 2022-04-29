@@ -13,11 +13,11 @@ public class Haversine {
     public double haversine(BusinessModel businessModelA, BusinessModel businessModelB)
     {
         // Attributes
+        double earthRadius = 6371;
         double latitude1 = businessModelA.getLatitude();
         double longitude1 = businessModelA.getLongitude();
         double latitude2 = businessModelB.getLatitude();
         double longitude2 = businessModelB.getLongitude();
-        double earthRadius = 6371;
 
         // distance between latitudes and longitudes
         double distanceLatitude = Math.toRadians(latitude2 - latitude1);
