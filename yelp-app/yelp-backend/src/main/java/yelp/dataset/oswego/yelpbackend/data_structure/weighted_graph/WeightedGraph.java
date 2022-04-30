@@ -7,9 +7,31 @@ import lombok.Data;
 
 @Data
 public class WeightedGraph {
-    private List<Node> vertices;
+    private List<WeightedNode> nodeList;
 
-    public WeightedGraph(int v) {
-        vertices = new ArrayList<>();
+    /**
+     * Constructor - initilize nodeList based on number of nodes passed in
+     * @param weightedNodesNumber
+     */
+    public WeightedGraph(int weightedNodesNumber) {
+        nodeList = new ArrayList<>();
+        for (int i = 0; i < weightedNodesNumber; i++) {
+            nodeList.add(new WeightedNode(i));
+        }
     }
+
+    /**
+     * Added weighted edge to graph
+     * @param sourceID
+     * @param destinationID
+     * @param weight
+     */
+    public void addWeightedEdge(int sourceID, int destinationID, double weight) {
+        WeightedEdge edge = new WeightedEdge(sourceID, destinationID, weight);
+        nodeList.get(sourceID).addEdge(edge);
+        nodeList.get(destinationID).addEdge(edge);
+    }
+
+
+
 }
