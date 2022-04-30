@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Node {
+public class WeightedNode {
     private int businessID;
-    private List<Edge> edges;
+    private List<WeightedEdge> edges;
 
-    public Node(int businessID) {this.businessID = businessID;}
+    public WeightedNode(int businessID) {this.businessID = businessID;}
 
-    public void addEdge(Edge edge) {this.edges.add(edge);}
+    public void addEdge(WeightedEdge edge) {this.edges.add(edge);}
 }

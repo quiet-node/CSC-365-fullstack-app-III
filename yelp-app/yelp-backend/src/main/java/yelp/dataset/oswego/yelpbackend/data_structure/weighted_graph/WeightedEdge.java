@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Edge implements Comparable<Edge> {
+public class WeightedEdge implements Comparable<WeightedEdge> {
     private int source, destination;
     private double weight;
-    public int compareTo(Edge other) {return Double.compare(this.weight, other.weight);}
+    public int compareTo(WeightedEdge other) {return Double.compare(this.weight, other.weight);}
 }
