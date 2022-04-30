@@ -8,7 +8,5 @@ import lombok.Data;
 public class Edge implements Comparable<Edge> {
     private int source, destination;
     private double weight;
-    
     public int compareTo(Edge other) {return Double.compare(this.weight, other.weight);}
-
 }
