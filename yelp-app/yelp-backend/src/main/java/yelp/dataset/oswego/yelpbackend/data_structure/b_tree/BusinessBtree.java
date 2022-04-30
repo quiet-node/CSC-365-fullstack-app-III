@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.data_structure.btree;
+package yelp.dataset.oswego.yelpbackend.data_structure.b_tree;
 
 import java.io.Serializable;
 import java.util.List;

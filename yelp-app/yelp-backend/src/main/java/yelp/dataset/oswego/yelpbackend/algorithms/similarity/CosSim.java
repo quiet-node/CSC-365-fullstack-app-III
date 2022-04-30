@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import lombok.NoArgsConstructor;
-import yelp.dataset.oswego.yelpbackend.data_structure.hashTable.HashTable;
+import yelp.dataset.oswego.yelpbackend.data_structure.hash_table.HashTable;
 
 @NoArgsConstructor
 public class CosSim {
