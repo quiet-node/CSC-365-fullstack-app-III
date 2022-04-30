@@ -10,7 +10,7 @@ public class Haversine {
      * @param businessModelB
      * @return double - the geographical distance between two nodes
      */
-    public double haversine(BusinessModel businessModelA, BusinessModel businessModelB)
+    public double calculateHaversine(BusinessModel businessModelA, BusinessModel businessModelB)
     {
         // Attributes
         double earthRadius = 6371;
