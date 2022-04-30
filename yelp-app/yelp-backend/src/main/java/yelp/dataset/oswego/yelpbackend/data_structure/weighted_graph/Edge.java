@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.dataStructure.graph;
+package yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

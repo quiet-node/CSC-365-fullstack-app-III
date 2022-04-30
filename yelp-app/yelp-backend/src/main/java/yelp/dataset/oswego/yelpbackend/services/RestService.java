@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.clustering.KMeans;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
-import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.btree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3RootModel;
 

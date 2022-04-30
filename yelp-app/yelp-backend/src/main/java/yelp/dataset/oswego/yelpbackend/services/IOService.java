@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import lombok.NoArgsConstructor;
-import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.btree.BusinessBtree;
 
 @NoArgsConstructor
 public class IOService {

@@ -7,7 +7,7 @@ import java.util.*;
 import org.json.JSONObject;
 
 import lombok.Getter;
-import yelp.dataset.oswego.yelpbackend.dataStructure.btree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.btree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 
 @Getter

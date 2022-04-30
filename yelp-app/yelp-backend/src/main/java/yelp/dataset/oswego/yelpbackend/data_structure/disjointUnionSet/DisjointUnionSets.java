@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.dataStructure.disjointUnionSet;
+package yelp.dataset.oswego.yelpbackend.data_structure.disjointUnionSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
