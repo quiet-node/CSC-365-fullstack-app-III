@@ -37,7 +37,7 @@ public class IOService {
      * @return BusinessBtree
      * @throws IOException
      */
-    protected BusinessBtree readBtree() throws IOException {
+    public BusinessBtree readBtree() throws IOException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bTree));
         try {
             BusinessBtree bTree = (BusinessBtree) ois.readObject();
