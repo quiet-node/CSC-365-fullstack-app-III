@@ -2,7 +2,6 @@ package yelp.dataset.oswego.yelpbackend.models.businessModels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import yelp.dataset.oswego.yelpbackend.algorithms.clustering.KMeans;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedGraph;
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3RootModel;
 
@@ -52,17 +53,21 @@ public class RestService {
     }
 
     /**
-     * A function to 
+     * A function to build the right JSON strcuture for D3
      * @return root JSON structure for D3
      * @throws IOException
      */
     public BusinessD3RootModel prepareD3() throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-
         BusinessD3RootModel d3Root = new KMeans().prepareD3(businessBtree, new Random().nextInt(10)+5);
         if (d3Root == null)
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return d3Root;
+    }
+
+    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
+        WeightedGraph graph = new WeightedGraph(requestedBusinessModel);
+        return graph.getClosestFour(requestedBusinessModel);
     }
 }

@@ -38,7 +38,7 @@ public class BusinessController {
     public ResponseEntity<List<BusinessModel>> getBusinessByName(@PathVariable String businessName) {
         List<BusinessModel> business = repo.findByName(businessName);
         if (business == null) 
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         
         return new ResponseEntity<>(business, HttpStatus.OK);
     }
@@ -65,4 +65,11 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().prepareD3(), HttpStatus.OK);
     }
     
+    @GetMapping("/{requestedBusiness}/closest/four")
+    public ResponseEntity<List<BusinessModel>> getClosestFour(@PathVariable String requestedBusiness) throws IOException{
+        List<BusinessModel> businesses = repo.findByName(requestedBusiness);
+        if (businesses.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        BusinessModel requestedBusinessModel = businesses.get(0);
+        return new ResponseEntity<>(new RestService().getClosestFour(requestedBusinessModel), HttpStatus.OK);
+    }
 }
