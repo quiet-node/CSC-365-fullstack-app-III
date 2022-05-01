@@ -11,8 +11,19 @@ import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModelComparator;
 
 public class WeightedGraphService {
+
     /**
-     * Retrieve a list of the neareast 100 businesses
+     * Get four geographically nearest businesses
+     * @param requestedBusinessModel
+     * @return
+     * @throws IOException
+     */
+    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
+        return businessListByDistance(requestedBusinessModel).subList(0, 4);
+    }
+
+    /**
+     * Retrieve a list of the neareast 200 businesses
      * @param requestedBusinessModel
      * @return
      * @throws IOException
@@ -30,7 +41,7 @@ public class WeightedGraphService {
             }
         }
         Collections.sort(businessListByDistance, new BusinessModelComparator());
-        return businessListByDistance.subList(0, 100);
+        return businessListByDistance.subList(0, 200);
     }
 
     /**

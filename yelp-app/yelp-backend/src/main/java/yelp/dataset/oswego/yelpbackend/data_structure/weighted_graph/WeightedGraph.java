@@ -17,21 +17,10 @@ public class WeightedGraph {
      * @param weightedNodesNumber
      * @throws IOException
      */
-    public WeightedGraph(BusinessModel requestedBusinessModel) throws IOException {
-        List<BusinessModel> businessListByDistance = new WeightedGraphService().businessListByDistance(requestedBusinessModel);
+    public WeightedGraph(List<BusinessModel> requestedBusinessList) throws IOException {
         nodeList = new ArrayList<>();
-        for (int i = 0; i < businessListByDistance.size(); i++) nodeList.add(new WeightedNode((int)businessListByDistance.get(i).getId()));
-        new WeightedGraphService().automatingAddingNodes(businessListByDistance, nodeList);
-    }
-
-    /**
-     * Get four geographically nearest businesses
-     * @param requestedBusinessModel
-     * @return
-     * @throws IOException
-     */
-    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
-        return new WeightedGraphService().businessListByDistance(requestedBusinessModel).subList(0, 4);
+        for (int i = 0; i < requestedBusinessList.size(); i++) nodeList.add(new WeightedNode((int)requestedBusinessList.get(i).getId()));
+        new WeightedGraphService().automatingAddingNodes(requestedBusinessList, nodeList);
     }
 
 }

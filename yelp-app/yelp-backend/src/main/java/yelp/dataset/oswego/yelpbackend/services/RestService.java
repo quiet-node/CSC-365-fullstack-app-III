@@ -67,7 +67,6 @@ public class RestService {
     }
 
     public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
-        WeightedGraph graph = new WeightedGraph(requestedBusinessModel);
-        return graph.getClosestFour(requestedBusinessModel);
+        return new WeightedGraphService().getClosestFour(requestedBusinessModel);
     }
 }
