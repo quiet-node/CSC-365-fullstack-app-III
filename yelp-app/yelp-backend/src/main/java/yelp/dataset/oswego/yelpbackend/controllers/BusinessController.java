@@ -1,8 +1,7 @@
 package yelp.dataset.oswego.yelpbackend.controllers;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedGraph;
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
@@ -68,8 +69,20 @@ public class BusinessController {
     @GetMapping("/{requestedBusiness}/closest/four")
     public ResponseEntity<List<BusinessModel>> getClosestFour(@PathVariable String requestedBusiness) throws IOException{
         List<BusinessModel> businesses = repo.findByName(requestedBusiness);
-        if (businesses.size() == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
         BusinessModel requestedBusinessModel = businesses.get(0);
-        return new ResponseEntity<>(new RestService().getClosestFour(requestedBusinessModel), HttpStatus.OK);
+        List<BusinessModel> businessList = new RestService().getClosestFour(requestedBusinessModel);
+        businessList.add(0, requestedBusinessModel);
+        return new ResponseEntity<>(businessList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{requestedBusiness}/closest/four/graph")
+    public ResponseEntity<WeightedGraph> getClosestFourGraph(@PathVariable String requestedBusiness) throws IOException{
+        List<BusinessModel> businesses = repo.findByName(requestedBusiness);
+        if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
+        BusinessModel requestedBusinessModel = businesses.get(0);
+        List<BusinessModel> requestedBusinessList = new RestService().getClosestFour(requestedBusinessModel);
+
+        return new ResponseEntity<>(new WeightedGraph(requestedBusinessModel, requestedBusinessList), HttpStatus.OK);
     }
 }

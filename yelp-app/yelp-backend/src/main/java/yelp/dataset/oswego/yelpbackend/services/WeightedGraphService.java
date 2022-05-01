@@ -46,6 +46,7 @@ public class WeightedGraphService {
 
     /**
      * Connect all nodes to each other. 
+     * Greedy algorithm
      * O(n*2+2)
      * @param weightedNodesNumber
      * @throws IOException
