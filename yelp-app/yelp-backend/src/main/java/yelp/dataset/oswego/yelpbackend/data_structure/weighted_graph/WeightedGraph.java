@@ -44,7 +44,7 @@ public class WeightedGraph {
 
         for (int i = 0; i < 10000; i++) {
             BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(i);
-            if (requestedBusinessModel.hashCode() != comparedBusiness.hashCode()) {
+            if (requestedBusinessModel.getId() != comparedBusiness.getId()) {
                 double distance = new Haversine().calculateHaversine(requestedBusinessModel, comparedBusiness);
                 comparedBusiness.setDistance(distance);
                 businessListByDistance.add(comparedBusiness);
