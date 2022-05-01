@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="yelp")
+
 public class BusinessModel implements Comparable<BusinessModel>, Serializable{
     @Id
     private long id;
