@@ -17,7 +17,7 @@ public class WeightedGraph {
     private List<WeightedNode> nodeList;
 
     /**
-     * Constructor - initilize nodeList i.e. form up a graph with the closest 20 businesses regard to the requested business
+     * Constructor - initilize nodeList i.e. form up a graph with the closest 100 businesses regard to the requested business
      * @param weightedNodesNumber
      * @throws IOException
      */
@@ -28,15 +28,19 @@ public class WeightedGraph {
         automatingAddingNodes(businessListByDistance);
     }
 
+    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
+        return businessListByDistance(requestedBusinessModel).subList(0, 4);
+    }
+
     /**
-     * Retrieve a list of the neareast 20 businesses
+     * Retrieve a list of the neareast 100 businesses
      * @param requestedBusinessModel
      * @return
      * @throws IOException
      */
     private List<BusinessModel> businessListByDistance(BusinessModel requestedBusinessModel) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<BusinessModel> businessListByDistance = new ArrayList<>();    
+        List<BusinessModel> businessListByDistance = new ArrayList<>();
 
         for (int i = 0; i < 10000; i++) {
             BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(i);
@@ -47,7 +51,7 @@ public class WeightedGraph {
             }
         }
         Collections.sort(businessListByDistance, new BusinessModelComparator());
-        return businessListByDistance.subList(0, 20);
+        return businessListByDistance.subList(0, 100);
     }
 
     /**
