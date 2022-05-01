@@ -2,6 +2,7 @@ package yelp.dataset.oswego.yelpbackend.models.businessModels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,11 +17,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="yelp")
-public class BusinessModel implements Comparable<BusinessModel>, Serializable {
+public class BusinessModel implements Comparable<BusinessModel>, Serializable{
     @Id
     private long id;
     private String  business_id, name, address;
-    private double stars, reviews, similarityRate, longitude, latitude;
+    private double stars, reviews, similarityRate, longitude, latitude, distance;
     private ArrayList<String> categories;
 
     public BusinessModel(long id) {
@@ -31,4 +32,6 @@ public class BusinessModel implements Comparable<BusinessModel>, Serializable {
     public int compareTo(BusinessModel b) {
         return Double.compare(this.getSimilarityRate(), b.similarityRate);
     }
+
+    
 }
