@@ -17,6 +17,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedGra
 import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3Models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
+import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 
 @RestController
@@ -84,5 +85,10 @@ public class BusinessController {
         List<BusinessModel> requestedBusinessList = new RestService().getClosestFour(requestedBusinessModel);
 
         return new ResponseEntity<>(new WeightedGraph(requestedBusinessModel, requestedBusinessList), HttpStatus.OK);
+    }
+
+    @GetMapping("/closest/four/hash-map")
+    public ResponseEntity<Map<BusinessModel, List<BusinessModel>>> getClosestFourHashMap() throws IOException{
+        return new ResponseEntity<>(new GraphService().getClosestFourHashMap(10000), HttpStatus.OK);
     }
 }

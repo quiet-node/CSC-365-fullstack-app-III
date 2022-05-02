@@ -38,10 +38,9 @@ public class GraphService {
      * @return Map<BusinessModel, List<BusinessModel>>
      * @throws IOException
      */
-    public Map<BusinessModel, List<BusinessModel>> getClosestFourAll(int numNode) throws IOException {
+    public Map<BusinessModel, List<BusinessModel>> getClosestFourHashMap(int numNode) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         Map<BusinessModel, List<BusinessModel>> closestFourHashMap = new HashMap<>();
-        
         for (int i = 0; i < numNode; i++) {
             List<BusinessModel> closestFourList = new ArrayList<>();
             BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
@@ -57,7 +56,7 @@ public class GraphService {
             closestFourList = closestFourList.subList(0, 4);
             closestFourHashMap.put(targetBusiness, closestFourList);
         }
-
+        System.out.println("done");
         return closestFourHashMap;
     }
     
