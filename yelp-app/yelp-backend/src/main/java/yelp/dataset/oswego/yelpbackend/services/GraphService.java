@@ -5,8 +5,9 @@ import java.io.IOException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
-import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModelComparator;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 
 public class GraphService {
 
@@ -18,31 +19,32 @@ public class GraphService {
      */
     public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<BusinessModel> businessListByDistance = new ArrayList<>();
+        List<BusinessModel> closestFourList = new ArrayList<>();
 
         for (int i = 0; i < 10000; i++) {
             BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(i);
             if (requestedBusinessModel.getId() != comparedBusiness.getId()) {
                 double distance = new Haversine().calculateHaversine(requestedBusinessModel, comparedBusiness);
                 comparedBusiness.setDistance(distance);
-                businessListByDistance.add(comparedBusiness);
+                closestFourList.add(comparedBusiness);
             }
         }
-        Collections.sort(businessListByDistance, new BusinessModelComparator());
-        return businessListByDistance.subList(0, 4);
+        Collections.sort(closestFourList, new BusinessModelComparator());
+        return closestFourList.subList(0, 4);
     }
 
     /**
      * Find four geographically nearest businesses for each business
      * @param numNode
-     * @return Map<BusinessModel, List<BusinessModel>>
+     * @return Map<Long, List<WeightedEdge>>
      * @throws IOException
      */
-    public Map<BusinessModel, List<BusinessModel>> getClosestFourHashMap(int numNode) throws IOException {
+    public Map<Long, List<WeightedEdge>> getClosestFourHashMap(int numNode) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        Map<BusinessModel, List<BusinessModel>> closestFourHashMap = new HashMap<>();
+        Map<Long, List<WeightedEdge>> closestFourHashMap = new HashMap<>();
         for (int i = 0; i < numNode; i++) {
             List<BusinessModel> closestFourList = new ArrayList<>();
+            List<WeightedEdge> edges = new ArrayList<>();
             BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
             for (int j = 0; j < numNode; j++) {
                 BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(j);
@@ -54,9 +56,12 @@ public class GraphService {
             }
             Collections.sort(closestFourList, new BusinessModelComparator());
             closestFourList = closestFourList.subList(0, 4);
-            closestFourHashMap.put(targetBusiness, closestFourList);
+            for (BusinessModel businessModel : closestFourList) {
+                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance());
+                edges.add(weightedEdge);
+            }
+            closestFourHashMap.put(targetBusiness.getId(), edges);
         }
-        System.out.println("done");
         return closestFourHashMap;
     }
     
