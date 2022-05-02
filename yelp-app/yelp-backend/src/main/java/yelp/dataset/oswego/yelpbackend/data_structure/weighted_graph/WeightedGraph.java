@@ -6,7 +6,7 @@ import java.util.List;
 
 import lombok.Data;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
-import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 
 @Data
 public class WeightedGraph {

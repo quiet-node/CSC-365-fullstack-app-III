@@ -1,6 +1,6 @@
 package yelp.dataset.oswego.yelpbackend.algorithms.haversine;
 
-import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 
 public class Haversine {
 

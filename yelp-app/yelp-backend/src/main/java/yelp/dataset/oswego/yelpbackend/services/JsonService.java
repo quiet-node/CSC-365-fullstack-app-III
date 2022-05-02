@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import lombok.Getter;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
-import yelp.dataset.oswego.yelpbackend.models.businessModels.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 
 @Getter
 public class JsonService{

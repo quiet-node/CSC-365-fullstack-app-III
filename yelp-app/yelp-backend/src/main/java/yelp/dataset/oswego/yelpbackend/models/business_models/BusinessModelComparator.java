@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.models.businessModels;
+package yelp.dataset.oswego.yelpbackend.models.business_models;
 
 import java.util.Comparator;
 

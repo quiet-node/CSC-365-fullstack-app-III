@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.models.centroidModels;
+package yelp.dataset.oswego.yelpbackend.models.centroid_models;
 
 import java.util.ArrayList;
 
