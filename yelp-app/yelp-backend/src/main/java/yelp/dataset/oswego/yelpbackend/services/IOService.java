@@ -9,8 +9,11 @@ import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -18,12 +21,12 @@ import org.json.JSONObject;
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
 
 @NoArgsConstructor
 public class IOService {
     private final String bTreeFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
-    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/graphs";
+    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-graphs";
 
     /**
      * A function to write a whole Btree to disk
@@ -61,10 +64,16 @@ public class IOService {
      * @param businessBtree
      * @throws IOException
      */
-    protected void writeNodesWithEdges(NearestBusinessModel nearestFourNode) throws IOException {
-        long businessID = nearestFourNode.getTargetBusinessID();
+    protected void writeNodesWithEdges(NearestNodeModel nearestFourNode) throws IOException {
+        /*
+         * This method will write 10,000 nodes to disk (disk usage = 40MBs in total). 
+         * Storing each node is a file will help holding neccessary and needed node in memory rather than holding the whole 10000 nodes
+         * Using byte buffer from java NIO helps speeing up the writing operation.
+         */
+
+        long targetNodeID = nearestFourNode.getRequestedNodeID();
         // Get the file
-        RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+businessID+".bin", "rw");
+        RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+targetNodeID+".bin", "rw");
         raf.seek(0);
         // Register FileChannel to operate read and write
         FileChannel wChannel = raf.getChannel();
@@ -95,37 +104,18 @@ public class IOService {
     }
 
     /**
-     * A function to read a btree node from disk
+     * A function to read a graph node from disk
      * @throws IOException
      */
-    protected void readNode() throws IOException {
-        // Get the file
-        RandomAccessFile raf = new RandomAccessFile(edgesFilePath, "rw");
-
-        // Register FileChannel to operate read and write
-        FileChannel rChannel = raf.getChannel();
-
-        // Allocaate rBufferSize 
-        int rBufferSize = 4096; // 4KB
-        if (rBufferSize > rChannel.size()) {
-            rBufferSize = (int) rChannel.size();
-        }
-        
-        // Register ByteBuffer to store message inside a buffer
-        ByteBuffer rBuffer = ByteBuffer.allocate(rBufferSize);
-
-        // Read the file to buffer
-        rChannel.read(rBuffer);
-        
-        // Flip the rBufferer
-        rBuffer.flip();
-
-        // clean up
-        rBuffer.clear();
-        rChannel.close();
-        raf.close();
-        
-        System.out.println("Reading from wBuffer: " +new String(rBuffer.array()));
+    protected NearestNodeModel readNodesWithEdges(long targetNodeID) throws IOException {
+        List<WeightedEdge> edges = new ArrayList<>();
+        Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".bin");
+        Files.lines(path).forEach(line -> {
+            String[] lineArray = line.split(",");
+            edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2])));
+        } 
+        );
+        return new NearestNodeModel(targetNodeID, edges);
     }
 
     /**

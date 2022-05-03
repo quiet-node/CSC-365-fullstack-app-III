@@ -11,6 +11,7 @@ import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
 
 
 public class RestService {
@@ -65,7 +66,7 @@ public class RestService {
         return d3Root;
     }
 
-    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
-        return new GraphService().getClosestFour(requestedBusinessModel);
+    public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
+        return new GraphService().getClosestFourByBusinessName(requestedBusinessModel);
     }
 }

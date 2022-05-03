@@ -4,11 +4,11 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
+import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 
 @Data
 @AllArgsConstructor
 public class NearestBusinessModel {
-    private long targetBusinessID;
-    private List<WeightedEdge> edges;
+    private BusinessModel requestedBusiness;
+    private List<BusinessModel> edges;
 }

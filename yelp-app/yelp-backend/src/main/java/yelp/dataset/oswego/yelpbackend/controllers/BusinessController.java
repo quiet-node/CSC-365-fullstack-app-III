@@ -18,6 +18,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedGra
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
@@ -68,29 +69,16 @@ public class BusinessController {
     public ResponseEntity<BusinessD3RootModel> prepareD3() throws IOException {
         return new ResponseEntity<>(new RestService().prepareD3(), HttpStatus.OK);
     }
-    
+
     @GetMapping("/{requestedBusiness}/closest/four")
-    public ResponseEntity<List<BusinessModel>> getClosestFour(@PathVariable String requestedBusiness) throws IOException{
+    public ResponseEntity<NearestBusinessModel> getClosestFourByBusinessName(@PathVariable String requestedBusiness) throws IOException{
         List<BusinessModel> businesses = repo.findByName(requestedBusiness);
         if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
-        BusinessModel requestedBusinessModel = businesses.get(0);
-        List<BusinessModel> businessList = new RestService().getClosestFour(requestedBusinessModel);
-        businessList.add(0, requestedBusinessModel);
-        return new ResponseEntity<>(businessList, HttpStatus.OK);
+        return new ResponseEntity<>(new RestService().getClosestFourByBusinessName(businesses.get(0)), HttpStatus.OK);
     }
 
-    @GetMapping("/{requestedBusiness}/closest/four/graph")
-    public ResponseEntity<WeightedGraph> getClosestFourGraph(@PathVariable String requestedBusiness) throws IOException{
-        List<BusinessModel> businesses = repo.findByName(requestedBusiness);
-        if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
-        BusinessModel requestedBusinessModel = businesses.get(0);
-        List<BusinessModel> requestedBusinessList = new RestService().getClosestFour(requestedBusinessModel);
-
-        return new ResponseEntity<>(new WeightedGraph(requestedBusinessModel, requestedBusinessList), HttpStatus.OK);
-    }
-
-    @GetMapping("/closest/four/hash-map")
-    public ResponseEntity<List<NearestBusinessModel>> getClosestFourHashMap() throws IOException{
+    @GetMapping("/closest/four/edges")
+    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdges() throws IOException{
         return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
     }
 }

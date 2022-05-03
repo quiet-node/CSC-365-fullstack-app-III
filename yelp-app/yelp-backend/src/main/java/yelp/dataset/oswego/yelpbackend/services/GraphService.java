@@ -9,23 +9,24 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdg
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
 
 public class GraphService {
 
     /**
      * Find four geographically nearest businesses for each business
-     * @param numNode
+     * @param numberOfNodes
      * @return List<NearestBusinessModel>
      * @throws IOException
      */
-    public List<NearestBusinessModel> getClosestFour(int numNode) throws IOException {
+    public List<NearestNodeModel> getClosestFour(int numberOfNodes) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<NearestBusinessModel> closestFourList = new ArrayList<>();
-        for (int i = 0; i < numNode; i++) {
+        List<NearestNodeModel> closestFourList = new ArrayList<>();
+        for (int i = 0; i < numberOfNodes; i++) {
             List<BusinessModel> closestFourBusinessModelList = new ArrayList<>();
             List<WeightedEdge> edges = new ArrayList<>();
             BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
-            for (int j = 0; j < numNode; j++) {
+            for (int j = 0; j < numberOfNodes; j++) {
                 BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(j);
                 if (targetBusiness.getId() != comparedBusiness.getId()){
                     double weight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
@@ -39,7 +40,7 @@ public class GraphService {
                 WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance());
                 edges.add(weightedEdge);
             }
-            closestFourList.add(new NearestBusinessModel(targetBusiness.getId(), edges));
+            closestFourList.add(new NearestNodeModel(targetBusiness.getId(), edges));
         }
         return closestFourList;
     }
@@ -51,20 +52,18 @@ public class GraphService {
      * @return List<BusinessModel>
      * @throws IOException
      */
-    public List<BusinessModel> getClosestFour(BusinessModel requestedBusinessModel) throws IOException {
+    public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<BusinessModel> closestFourList = new ArrayList<>();
+        NearestNodeModel nearestNodeModel = new IOService().readNodesWithEdges(requestedBusinessModel.getId());
+        List<BusinessModel> businessModelEdges = new ArrayList<>();
 
-        for (int i = 0; i < 10000; i++) {
-            BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(i);
-            if (requestedBusinessModel.getId() != comparedBusiness.getId()) {
-                double distance = new Haversine().calculateHaversine(requestedBusinessModel, comparedBusiness);
-                comparedBusiness.setDistance(distance);
-                closestFourList.add(comparedBusiness);
-            }
-        }
-        Collections.sort(closestFourList, new BusinessModelComparator());
-        return closestFourList.subList(0, 4);
+        nearestNodeModel.getEdges().forEach(edge -> {
+            BusinessModel destinationBusinessModel = businessBtree.findKeyByBusinessID((int) edge.getDestinationID());
+            destinationBusinessModel.setDistance(edge.getWeight());
+            businessModelEdges.add(destinationBusinessModel);
+        });
+
+        return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
     }
     
 }
