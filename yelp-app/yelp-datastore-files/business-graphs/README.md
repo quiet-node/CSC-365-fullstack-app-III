@@ -1,1 +1,1 @@
-### this folder contains node-{business_id}.bin
+### This folder contains node-{business_id}.bin
