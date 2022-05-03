@@ -11,14 +11,19 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+
+import org.json.JSONObject;
 
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
 
 @NoArgsConstructor
 public class IOService {
-    private final String bTree = System.getProperty("user.dir") + "/yelp-app/yelp-dataset/btree.bin";
-    private final String bTreeRoot = System.getProperty("user.dir") + "/yelp-app/yelp-dataset/btree-node.bin";
+    private final String bTreeFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
+    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/graphs";
 
     /**
      * A function to write a whole Btree to disk
@@ -26,7 +31,7 @@ public class IOService {
      * @throws IOException
      */
     protected void writeBtree(BusinessBtree businessBtree) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bTree));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bTreeFilePath));
         oos.writeObject(businessBtree);
         System.out.println("Successfully write bTree to btree.bin!");
         oos.close();
@@ -38,7 +43,7 @@ public class IOService {
      * @throws IOException
      */
     public BusinessBtree readBtree() throws IOException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bTree));
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bTreeFilePath));
         try {
             BusinessBtree bTree = (BusinessBtree) ois.readObject();
             ois.close();
@@ -51,13 +56,15 @@ public class IOService {
     }
 
     /**
-     * A function to write a btree node to disk using File Channel and Buffer
+     * A function to write each node with the edges between the closest four businesses to disk 
+     * using File Channel and Buffer
      * @param businessBtree
      * @throws IOException
      */
-    protected void writeNode(BusinessBtree businessBtree) throws IOException {
+    protected void writeNodesWithEdges(NearestBusinessModel nearestFourNode) throws IOException {
+        long businessID = nearestFourNode.getTargetBusinessID();
         // Get the file
-        RandomAccessFile raf = new RandomAccessFile(bTreeRoot, "rw");
+        RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+businessID+".bin", "rw");
         raf.seek(0);
         // Register FileChannel to operate read and write
         FileChannel wChannel = raf.getChannel();
@@ -66,7 +73,11 @@ public class IOService {
         ByteBuffer wBuffer = ByteBuffer.allocate(4096); // 4KB
 
         // Write information to wBuffer
-        wBuffer.put("writing to disk...".getBytes());
+        List<WeightedEdge> edges = nearestFourNode.getEdges();
+        for (WeightedEdge weightedEdge : edges) {
+            String putString = weightedEdge.getSourceID() +","+ weightedEdge.getDestinationID() + "," +weightedEdge.getWeight()+"\n";
+            wBuffer.put(putString.getBytes());
+        }
 
         // ByteBuffer::flip() is used to flip BB from "reading from I/O"(put) to "writing to I/O"(get) after a sequence of put
         wBuffer.flip();
@@ -81,8 +92,6 @@ public class IOService {
         wBuffer.clear();
         wChannel.close();
         raf.close();
-        
-        System.out.println("Successfully wrote node to file!");
     }
 
     /**
@@ -91,7 +100,7 @@ public class IOService {
      */
     protected void readNode() throws IOException {
         // Get the file
-        RandomAccessFile raf = new RandomAccessFile(bTreeRoot, "rw");
+        RandomAccessFile raf = new RandomAccessFile(edgesFilePath, "rw");
 
         // Register FileChannel to operate read and write
         FileChannel rChannel = raf.getChannel();
