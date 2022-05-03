@@ -1,5 +1,5 @@
 ### yelp-datastore-files
-yelp-app/yelp-datastore-files/business-btree/*
-yelp-app/yelp-datastore-files/business-graphs/*
+yelp-app/yelp-datastore-files/business-btree/*.bin
+yelp-app/yelp-datastore-files/business-graphs/*.bin
 yelp-app/.DS_Store
 yelp-app/yelp-datastore-files/.DS_Store
