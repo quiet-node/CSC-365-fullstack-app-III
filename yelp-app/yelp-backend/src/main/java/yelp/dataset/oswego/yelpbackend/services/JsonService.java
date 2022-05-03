@@ -5,13 +5,17 @@ import java.io.FileReader;
 import java.util.*;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import lombok.Getter;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
+import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 
 @Getter
 public class JsonService{
+    @Autowired
+    BusinessRepository businessRepository;
     BusinessBtree businessBtree = new BusinessBtree(64);
 
     /**
@@ -61,6 +65,9 @@ public class JsonService{
                 
                 // add to businessBrree
                 businessBtree.insert(bModel);
+
+                // add to MySQL yelp database
+                // businessRepository.save(bModel);
 
             }
             br.close();
