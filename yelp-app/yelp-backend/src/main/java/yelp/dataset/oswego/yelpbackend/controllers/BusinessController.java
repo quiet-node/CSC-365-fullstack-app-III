@@ -91,6 +91,6 @@ public class BusinessController {
 
     @GetMapping("/closest/four/hash-map")
     public ResponseEntity<List<NearestBusinessModel>> getClosestFourHashMap() throws IOException{
-        return new ResponseEntity<>(new GraphService().getClosestFourHashMap(10000), HttpStatus.OK);
+        return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
     }
 }

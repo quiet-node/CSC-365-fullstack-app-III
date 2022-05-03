@@ -15,14 +15,14 @@ public class GraphService {
     /**
      * Find four geographically nearest businesses for each business
      * @param numNode
-     * @return Map<Long, List<WeightedEdge>>
+     * @return List<NearestBusinessModel>
      * @throws IOException
      */
-    public List<NearestBusinessModel> getClosestFourHashMap(int numNode) throws IOException {
+    public List<NearestBusinessModel> getClosestFour(int numNode) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<NearestBusinessModel> closestFourHashMap = new ArrayList<>();
+        List<NearestBusinessModel> closestFourList = new ArrayList<>();
         for (int i = 0; i < numNode; i++) {
-            List<BusinessModel> closestFourList = new ArrayList<>();
+            List<BusinessModel> closestFourBusinessModelList = new ArrayList<>();
             List<WeightedEdge> edges = new ArrayList<>();
             BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
             for (int j = 0; j < numNode; j++) {
@@ -30,18 +30,18 @@ public class GraphService {
                 if (targetBusiness.getId() != comparedBusiness.getId()){
                     double weight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
                     comparedBusiness.setDistance(weight);
-                    closestFourList.add(comparedBusiness);
+                    closestFourBusinessModelList.add(comparedBusiness);
                 }
             }
-            Collections.sort(closestFourList, new BusinessModelComparator());
-            closestFourList = closestFourList.subList(0, 4);
-            for (BusinessModel businessModel : closestFourList) {
+            Collections.sort(closestFourBusinessModelList, new BusinessModelComparator());
+            closestFourBusinessModelList = closestFourBusinessModelList.subList(0, 4);
+            for (BusinessModel businessModel : closestFourBusinessModelList) {
                 WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance());
                 edges.add(weightedEdge);
             }
-            closestFourHashMap.add(new NearestBusinessModel(targetBusiness.getId(), edges));
+            closestFourList.add(new NearestBusinessModel(targetBusiness.getId(), edges));
         }
-        return closestFourHashMap;
+        return closestFourList;
     }
 
 
