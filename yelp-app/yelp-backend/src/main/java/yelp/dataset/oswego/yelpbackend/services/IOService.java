@@ -19,7 +19,7 @@ import java.util.List;
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 @NoArgsConstructor
 public class IOService {

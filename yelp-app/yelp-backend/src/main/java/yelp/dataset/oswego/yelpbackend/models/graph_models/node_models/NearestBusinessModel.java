@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.models.graph_models;
+package yelp.dataset.oswego.yelpbackend.models.graph_models.node_models;
 
 import java.util.List;
 

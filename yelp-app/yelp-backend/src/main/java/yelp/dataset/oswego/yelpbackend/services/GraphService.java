@@ -6,11 +6,12 @@ import java.io.IOException;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 public class GraphService {
 

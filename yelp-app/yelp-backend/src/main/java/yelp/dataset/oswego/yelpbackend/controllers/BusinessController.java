@@ -15,8 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 

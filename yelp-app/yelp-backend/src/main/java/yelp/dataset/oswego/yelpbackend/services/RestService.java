@@ -11,8 +11,8 @@ import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 
 public class RestService {
