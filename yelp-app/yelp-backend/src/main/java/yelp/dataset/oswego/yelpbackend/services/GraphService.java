@@ -22,7 +22,8 @@ public class GraphService {
      */
     public List<NearestNodeModel> getClosestFour(int numberOfNodes) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<NearestNodeModel> closestFourList = new ArrayList<>();
+        List<NearestNodeModel> nearestNodesList = new ArrayList<>();
+        
         for (int i = 0; i < numberOfNodes; i++) {
             List<BusinessModel> closestFourBusinessModelList = new ArrayList<>();
             List<WeightedEdge> edges = new ArrayList<>();
@@ -41,10 +42,11 @@ public class GraphService {
                 WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), businessModel.getSimilarityRate());
                 edges.add(weightedEdge);
             }
-            closestFourList.add(new NearestNodeModel(targetBusiness.getId(), edges));
-            // new IOService().writeNodesWithEdges(closestFourList.get(i));
+            nearestNodesList.add(new NearestNodeModel(targetBusiness.getId(), edges));
+            // new IOService().writeNodesWithEdges(nearestNodeList.get(i)); 
         }
-        return closestFourList;
+        new IOService().writeNearestNodesList(nearestNodesList);
+        return nearestNodesList;
     }
 
 

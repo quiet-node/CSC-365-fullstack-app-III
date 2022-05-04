@@ -70,8 +70,8 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().prepareD3(), HttpStatus.OK);
     }
     
-    @GetMapping("/closest/four/edges")
-    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdges() throws IOException{
+    @GetMapping("/closest/four/edges/all")
+    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdgesForAll() throws IOException{
         return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
     }
 
