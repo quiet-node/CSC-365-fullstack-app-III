@@ -1,5 +1,6 @@
 package yelp.dataset.oswego.yelpbackend.models.graph_models;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -8,7 +9,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdg
 
 @Data
 @AllArgsConstructor
-public class NearestNodeModel {
+public class NearestNodeModel implements Serializable {
     private long requestedNodeID;
     private List<WeightedEdge> edges;
 }

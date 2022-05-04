@@ -16,8 +16,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
@@ -25,7 +23,8 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
 
 @NoArgsConstructor
 public class IOService {
-    private final String bTreeFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
+    private final String bTreeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
+    private final String neareastNodeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin";
     private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-graphs";
 
     /**
@@ -34,7 +33,7 @@ public class IOService {
      * @throws IOException
      */
     protected void writeBtree(BusinessBtree businessBtree) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bTreeFilePath));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bTreeFile));
         oos.writeObject(businessBtree);
         System.out.println("Successfully write bTree to btree.bin!");
         oos.close();
@@ -46,7 +45,7 @@ public class IOService {
      * @throws IOException
      */
     public BusinessBtree readBtree() throws IOException {
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bTreeFilePath));
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bTreeFile));
         try {
             BusinessBtree bTree = (BusinessBtree) ois.readObject();
             ois.close();
@@ -56,6 +55,18 @@ public class IOService {
             ois.close();
             return null;
         }
+    }
+
+    /**
+     * A function to write a whole NearestNodeModel to disk
+     * @param businessBtree
+     * @throws IOException
+     */
+    protected void writeNearestNodesList(List<NearestNodeModel> nearestNodeList) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(neareastNodeFile));
+        oos.writeObject(nearestNodeList);
+        System.out.println("Successfully write nearest node list to nearestNodeList.bin.");
+        oos.close();
     }
 
     /**
