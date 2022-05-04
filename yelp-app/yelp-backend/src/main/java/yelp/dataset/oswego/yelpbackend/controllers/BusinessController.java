@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
-import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedGraph;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.NearestNodeModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
-import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 
 @RestController

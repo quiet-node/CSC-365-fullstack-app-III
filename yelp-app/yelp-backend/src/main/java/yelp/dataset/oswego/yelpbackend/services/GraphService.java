@@ -43,9 +43,11 @@ public class GraphService {
                 edges.add(weightedEdge);
             }
             nearestNodesList.add(new NearestNodeModel(targetBusiness.getId(), edges));
+            // write each node to disk
             // new IOService().writeNodesWithEdges(nearestNodeList.get(i)); 
         }
-        new IOService().writeNearestNodesList(nearestNodesList);
+        // write whole list to disk
+        // new IOService().writeNearestNodesList(nearestNodesList);
         return nearestNodesList;
     }
 
