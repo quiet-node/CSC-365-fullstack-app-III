@@ -10,6 +10,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.Disjoin
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
@@ -53,7 +54,7 @@ public class GraphService {
     }
 
 
-        /**
+    /**
      * Find four geographically nearest businesses based on business name
      * @param requestedBusinessModel
      * @return List<BusinessModel>
@@ -75,5 +76,37 @@ public class GraphService {
         });
 
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
+    }
+
+    /**
+     * Using union-find algorithm to find connected components (subsets)
+     * @return List<ConnectedComponenet>
+     * @throws IOException
+     */
+    public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
+        List<NearestNodeModel> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new DisjointUnionSets(10000);
+
+        nearestNodeModels.forEach(model -> {
+            model.getEdges().forEach(edge -> {
+                int sourceRoot = disjointUnionSets.findDisjointSet((int) edge.getSourceID());
+                int destinationRoot = disjointUnionSets.findDisjointSet((int) edge.getDestinationID());
+                disjointUnionSets.unionDisjoinSets(sourceRoot, destinationRoot);
+            });
+        });
+        List<Integer> rootSet = new ArrayList<>(new HashSet<Integer>(disjointUnionSets.getParent()));
+
+        List<ConnectedComponenet> connectedComponenets = new ArrayList<>();
+        for (int i = 0; i < rootSet.size(); i++) {
+            int root = rootSet.get(i);
+            List<Integer> children = new ArrayList<>();
+                for (int j = 0; j < disjointUnionSets.getParent().size(); j++) {
+                    if (disjointUnionSets.getParent().get(j) == root) {
+                        children.add(j);
+                    }
+                }
+            connectedComponenets.add(new ConnectedComponenet(root, children));
+        }
+        return connectedComponenets;
     }
 }
