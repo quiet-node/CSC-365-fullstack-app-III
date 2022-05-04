@@ -15,9 +15,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
+import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 
 @RestController
@@ -67,15 +69,21 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().prepareD3(), HttpStatus.OK);
     }
     
-    @GetMapping("/closest/four/edges/all")
+    @GetMapping("/graph/closest/four/edges/all")
     public ResponseEntity<List<NearestNodeModel>> getClosestFourEdgesForAll() throws IOException{
         return new ResponseEntity<>(new RestService().getClosestFourNodeList(), HttpStatus.OK);
     }
 
-    @GetMapping("/{requestedBusiness}/closest/four")
+    @GetMapping("/graph/{requestedBusiness}/closest/four")
     public ResponseEntity<NearestBusinessModel> getClosestFourByBusinessName(@PathVariable String requestedBusiness) throws IOException{
         List<BusinessModel> businesses = repo.findByName(requestedBusiness);
         if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
         return new ResponseEntity<>(new RestService().getClosestFourByBusinessName(businesses.get(0)), HttpStatus.OK);
     }
+
+    @GetMapping("/graph/connectivity-check")
+    public ResponseEntity<List<ConnectedComponenet>> connectivityCheck() throws IOException{
+        return new ResponseEntity<>(new GraphService().fetchConnectedComponents(), HttpStatus.OK);
+    }
+
 }
