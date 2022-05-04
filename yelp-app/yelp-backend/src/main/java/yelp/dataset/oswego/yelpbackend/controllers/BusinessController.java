@@ -69,16 +69,16 @@ public class BusinessController {
     public ResponseEntity<BusinessD3RootModel> prepareD3() throws IOException {
         return new ResponseEntity<>(new RestService().prepareD3(), HttpStatus.OK);
     }
+    
+    @GetMapping("/closest/four/edges")
+    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdges() throws IOException{
+        return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
+    }
 
     @GetMapping("/{requestedBusiness}/closest/four")
     public ResponseEntity<NearestBusinessModel> getClosestFourByBusinessName(@PathVariable String requestedBusiness) throws IOException{
         List<BusinessModel> businesses = repo.findByName(requestedBusiness);
         if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
         return new ResponseEntity<>(new RestService().getClosestFourByBusinessName(businesses.get(0)), HttpStatus.OK);
-    }
-
-    @GetMapping("/closest/four/edges")
-    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdges() throws IOException{
-        return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
     }
 }

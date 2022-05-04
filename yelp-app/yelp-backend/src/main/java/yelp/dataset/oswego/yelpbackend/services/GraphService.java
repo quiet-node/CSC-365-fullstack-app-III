@@ -67,7 +67,6 @@ public class GraphService {
             destinationBusinessModel.setSimilarityRate(similarityRate);
             
             businessModelEdges.add(destinationBusinessModel);
-            System.out.println(edge);
         });
 
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
