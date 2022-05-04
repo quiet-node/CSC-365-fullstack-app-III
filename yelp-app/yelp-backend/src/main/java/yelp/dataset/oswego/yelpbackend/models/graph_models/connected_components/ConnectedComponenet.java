@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ConnectedComponenets {
+public class ConnectedComponenet {
     private int root;
     private List<Integer> children;
 }
