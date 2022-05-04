@@ -72,7 +72,7 @@ public class BusinessController {
     
     @GetMapping("/closest/four/edges/all")
     public ResponseEntity<List<NearestNodeModel>> getClosestFourEdgesForAll() throws IOException{
-        return new ResponseEntity<>(new GraphService().getClosestFour(10000), HttpStatus.OK);
+        return new ResponseEntity<>(new RestService().getClosestFourNodeList(), HttpStatus.OK);
     }
 
     @GetMapping("/{requestedBusiness}/closest/four")
