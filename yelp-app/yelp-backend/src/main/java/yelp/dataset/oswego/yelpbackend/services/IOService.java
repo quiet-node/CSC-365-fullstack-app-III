@@ -84,7 +84,8 @@ public class IOService {
         // Write information to wBuffer
         List<WeightedEdge> edges = nearestFourNode.getEdges();
         for (WeightedEdge weightedEdge : edges) {
-            String putString = weightedEdge.getSourceID() +","+ weightedEdge.getDestinationID() + "," +weightedEdge.getWeight()+"\n";
+            String putString = weightedEdge.getSourceID() +","+ weightedEdge.getDestinationID() + "," +weightedEdge.getDistanceWeight()+"\n";
+            System.out.print(putString);
             wBuffer.put(putString.getBytes());
         }
 
@@ -112,9 +113,8 @@ public class IOService {
         Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".bin");
         Files.lines(path).forEach(line -> {
             String[] lineArray = line.split(",");
-            edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2])));
-        } 
-        );
+            edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2]), -9999.99));
+        });
         return new NearestNodeModel(targetNodeID, edges);
     }
 

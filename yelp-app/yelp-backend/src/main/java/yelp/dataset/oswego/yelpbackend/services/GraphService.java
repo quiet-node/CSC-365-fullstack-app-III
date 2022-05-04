@@ -4,6 +4,7 @@ import java.util.*;
 import java.io.IOException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
+import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
@@ -37,10 +38,11 @@ public class GraphService {
             Collections.sort(closestFourBusinessModelList, new BusinessModelComparator());
             closestFourBusinessModelList = closestFourBusinessModelList.subList(0, 4);
             for (BusinessModel businessModel : closestFourBusinessModelList) {
-                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance());
+                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), businessModel.getSimilarityRate());
                 edges.add(weightedEdge);
             }
             closestFourList.add(new NearestNodeModel(targetBusiness.getId(), edges));
+            // new IOService().writeNodesWithEdges(closestFourList.get(i));
         }
         return closestFourList;
     }
@@ -59,11 +61,15 @@ public class GraphService {
 
         nearestNodeModel.getEdges().forEach(edge -> {
             BusinessModel destinationBusinessModel = businessBtree.findKeyByBusinessID((int) edge.getDestinationID());
-            destinationBusinessModel.setDistance(edge.getWeight());
+            destinationBusinessModel.setDistance(edge.getDistanceWeight());
+            
+            double similarityRate = new CosSim().calcSimRate(requestedBusinessModel.getCategories(), destinationBusinessModel.getCategories());
+            destinationBusinessModel.setSimilarityRate(similarityRate);
+            
             businessModelEdges.add(destinationBusinessModel);
+            System.out.println(edge);
         });
 
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
     }
-    
 }

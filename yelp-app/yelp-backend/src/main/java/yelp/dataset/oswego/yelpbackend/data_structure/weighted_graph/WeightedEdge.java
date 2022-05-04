@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WeightedEdge implements Comparable<WeightedEdge> {
     private long sourceID, destinationID;
-    private double weight;
-    public int compareTo(WeightedEdge other) {return Double.compare(this.weight, other.weight);}
+    private double distanceWeight, similarityWeight;
+
+    @Override
+    public int compareTo(WeightedEdge other) {
+        return Double.compare(this.distanceWeight, other.distanceWeight);
+    }
 }

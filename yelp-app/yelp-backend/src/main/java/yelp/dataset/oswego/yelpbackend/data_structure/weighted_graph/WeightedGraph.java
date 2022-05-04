@@ -6,6 +6,7 @@ import java.util.List;
 
 import lombok.Data;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
+import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 
 @Data
@@ -36,8 +37,9 @@ public class WeightedGraph {
     private void automatingAddingNodes(List<BusinessModel> businessListByDistance, List<WeightedNode> nodeList) {
         for (int i = 0; i < businessListByDistance.size(); i++) {
             for (int j = i+1; j < businessListByDistance.size(); j++) {
-                double weight = new Haversine().calculateHaversine(businessListByDistance.get(i), businessListByDistance.get(j));
-                addWeightedEdge(nodeList, i, j, weight);
+                double distanceWeight = new Haversine().calculateHaversine(businessListByDistance.get(i), businessListByDistance.get(j));
+                double similarityWeight = new CosSim().calcSimRate(businessListByDistance.get(i).getCategories(), businessListByDistance.get(j).getCategories());
+                addWeightedEdge(nodeList, i, j, distanceWeight, similarityWeight);
             }
         }
     }
@@ -48,8 +50,8 @@ public class WeightedGraph {
      * @param destinationID
      * @param weight
      */
-    private void addWeightedEdge(List<WeightedNode> nodeList, int sourceID, int destinationID, double weight) {
-        WeightedEdge edge = new WeightedEdge(nodeList.get(sourceID).getBusinessID(), nodeList.get(destinationID).getBusinessID(), weight);
+    private void addWeightedEdge(List<WeightedNode> nodeList, int sourceID, int destinationID, double distanceWeight, double similarityWeight) {
+        WeightedEdge edge = new WeightedEdge(nodeList.get(sourceID).getBusinessID(), nodeList.get(destinationID).getBusinessID(), distanceWeight, similarityWeight);
         nodeList.get(sourceID).addEdge(edge);
         nodeList.get(destinationID).addEdge(edge);
     }
