@@ -59,7 +59,7 @@ public class IOService {
 
     /**
      * A function to write a whole NearestNodeModel to disk
-     * @param businessBtree
+     * @param nearestNodeList
      * @throws IOException
      */
     protected void writeNearestNodesList(List<NearestNodeModel> nearestNodeList) throws IOException {
@@ -67,6 +67,24 @@ public class IOService {
         oos.writeObject(nearestNodeList);
         System.out.println("Successfully write nearest node list to nearestNodeList.bin.");
         oos.close();
+    }
+
+    /**
+     * A function to read a whole NearestNodeModel from disk
+     * @param businessBtree
+     * @throws IOException
+     */
+    protected List<NearestNodeModel> readNearestNodesList() throws IOException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(neareastNodeFile));
+        try {
+            List<NearestNodeModel> nearestNodeList = (List<NearestNodeModel>) ois.readObject();
+            ois.close();
+            return nearestNodeList;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            ois.close();
+            return null;
+        }
     }
 
     /**
