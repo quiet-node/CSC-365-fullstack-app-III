@@ -11,10 +11,10 @@ public class DisjointUnionSets {
     private List<Integer> parent, size;
     private int maxComponents;
 
-    public DisjointUnionSets(int maxComponents) {
+    public DisjointUnionSets() {
         parent = new ArrayList<>(Collections.nCopies(maxComponents, 0));
         size = new ArrayList<>(Collections.nCopies(maxComponents, 0));
-        this.maxComponents = maxComponents;
+        this.maxComponents = 10000;
         initializeDisjoinSet();
     }
 

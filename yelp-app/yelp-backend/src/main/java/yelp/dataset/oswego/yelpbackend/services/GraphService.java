@@ -85,7 +85,7 @@ public class GraphService {
      */
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         List<NearestNodeModel> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = new DisjointUnionSets(10000);
+        DisjointUnionSets disjointUnionSets = new DisjointUnionSets();
 
         nearestNodeModels.forEach(model -> {
             model.getEdges().forEach(edge -> {

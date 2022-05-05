@@ -12,7 +12,7 @@ public class WeightedNode {
     private List<WeightedEdge> edges;
 
     public WeightedNode(int businessID) {
-        this.businessID = businessID; 
+        this.businessID = businessID;
         this.edges = new ArrayList<>();
     }
 

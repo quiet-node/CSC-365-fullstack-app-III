@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ConnectedComponenet {
-    private int root;
+    private int rootID;
     private List<Integer> children;
 }
