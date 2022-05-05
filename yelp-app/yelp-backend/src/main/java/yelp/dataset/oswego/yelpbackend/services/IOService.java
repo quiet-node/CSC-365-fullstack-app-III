@@ -25,7 +25,7 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNo
 public class IOService {
     private final String bTreeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
     private final String neareastNodeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin";
-    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-graphs";
+    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nodes";
 
     /**
      * A function to write a whole Btree to disk
@@ -102,7 +102,7 @@ public class IOService {
 
         long targetNodeID = nearestFourNode.getRequestedNodeID();
         // Get the file
-        RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+targetNodeID+".bin", "rw");
+        RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+targetNodeID+".csv", "rw");
         raf.seek(0);
         // Register FileChannel to operate read and write
         FileChannel wChannel = raf.getChannel();
@@ -113,8 +113,7 @@ public class IOService {
         // Write information to wBuffer
         List<WeightedEdge> edges = nearestFourNode.getEdges();
         for (WeightedEdge weightedEdge : edges) {
-            String putString = weightedEdge.getSourceID() +","+ weightedEdge.getDestinationID() + "," +weightedEdge.getDistanceWeight()+"\n";
-            System.out.print(putString);
+            String putString = weightedEdge.getSourceID() +","+ weightedEdge.getDestinationID() + "," +weightedEdge.getDistanceWeight()+ "," +weightedEdge.getSimilarityWeight()+"\n";
             wBuffer.put(putString.getBytes());
         }
 
@@ -139,7 +138,7 @@ public class IOService {
      */
     protected NearestNodeModel readNodesWithEdges(long targetNodeID) throws IOException {
         List<WeightedEdge> edges = new ArrayList<>();
-        Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".bin");
+        Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".csv");
         Files.lines(path).forEach(line -> {
             String[] lineArray = line.split(",");
             edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2]), -9999.99));

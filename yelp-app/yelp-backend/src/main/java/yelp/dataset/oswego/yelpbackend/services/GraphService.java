@@ -46,10 +46,11 @@ public class GraphService {
                 edges.add(weightedEdge);
             }
             nearestNodesList.add(new NearestNodeModel(targetBusiness.getId(), edges));
-            // write each node to disk
-            // new IOService().writeNodesWithEdges(nearestNodeList.get(i)); 
+            
+            // write each node to disk -- this takes 4 minutes and 2.64 seconds to finish
+            // new IOService().writeNodesWithEdges(nearestNodesList.get(i)); 
         }
-        // write whole list to disk
+        // write whole list to disk -- this takes 24.09 seconds to finish
         // new IOService().writeNearestNodesList(nearestNodesList);
         return nearestNodesList;
     }
