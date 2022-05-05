@@ -17,12 +17,12 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNo
 public class GraphService {
 
     /**
-     * Find four geographically nearest businesses for each business
+     * Find four geographically nearest businesses for each business and write it to disk
      * @param numberOfNodes
      * @return List<NearestBusinessModel>
      * @throws IOException
      */
-    public List<NearestNodeModel> getClosestFour(int numberOfNodes) throws IOException {
+    public List<NearestNodeModel> writeClosestFourToDataStore(int numberOfNodes) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         List<NearestNodeModel> nearestNodesList = new ArrayList<>();
         
@@ -33,15 +33,16 @@ public class GraphService {
             for (int j = 0; j < numberOfNodes; j++) {
                 BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(j);
                 if (targetBusiness.getId() != comparedBusiness.getId()){
-                    double weight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
-                    comparedBusiness.setDistance(weight);
+                    double distanceWeight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
+                    comparedBusiness.setDistance(distanceWeight);
                     closestFourBusinessModelList.add(comparedBusiness);
                 }
             }
             Collections.sort(closestFourBusinessModelList, new BusinessModelComparator());
             closestFourBusinessModelList = closestFourBusinessModelList.subList(0, 4);
             for (BusinessModel businessModel : closestFourBusinessModelList) {
-                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), businessModel.getSimilarityRate());
+                double simRateWeight = new CosSim().calcSimRate(targetBusiness.getCategories(), businessModel.getCategories());
+                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), simRateWeight);
                 edges.add(weightedEdge);
             }
             nearestNodesList.add(new NearestNodeModel(targetBusiness.getId(), edges));
@@ -89,6 +90,7 @@ public class GraphService {
 
         nearestNodeModels.forEach(model -> {
             model.getEdges().forEach(edge -> {
+                System.out.println(edge);
                 int sourceRoot = disjointUnionSets.findDisjointSet((int) edge.getSourceID());
                 int destinationRoot = disjointUnionSets.findDisjointSet((int) edge.getDestinationID());
                 disjointUnionSets.unionDisjoinSets(sourceRoot, destinationRoot);

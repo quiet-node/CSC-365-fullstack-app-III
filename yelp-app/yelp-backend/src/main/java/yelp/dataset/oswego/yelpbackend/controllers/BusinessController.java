@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -72,6 +73,12 @@ public class BusinessController {
     @GetMapping("/graph/closest/four/edges/all")
     public ResponseEntity<List<NearestNodeModel>> getClosestFourEdgesForAll() throws IOException{
         return new ResponseEntity<>(new RestService().getClosestFourNodeList(), HttpStatus.OK);
+    }
+
+    @PostMapping("/graph/closest/four/edges/all/write-to-disk")
+    public ResponseEntity<String> writeClosestFourByBusinessName() throws IOException{
+        new GraphService().writeClosestFourToDataStore(10000);
+        return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
     }
 
     @GetMapping("/graph/{requestedBusiness}/closest/four")
