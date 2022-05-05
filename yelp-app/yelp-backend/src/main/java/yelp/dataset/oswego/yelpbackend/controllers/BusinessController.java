@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
@@ -71,7 +71,7 @@ public class BusinessController {
     }
     
     @GetMapping("/graph/closest/four/edges/all")
-    public ResponseEntity<List<NearestNodeModel>> getClosestFourEdgesForAll() throws IOException{
+    public ResponseEntity<List<WeightedNode>> getClosestFourEdgesForAll() throws IOException{
         return new ResponseEntity<>(new RestService().getClosestFourNodeList(), HttpStatus.OK);
     }
 

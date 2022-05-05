@@ -43,7 +43,7 @@ public class DisjointUnionSets {
     }
 
     /**
-     * 
+     * Union the unrelated nodes to form up disjoin sets
      * @param nodeA
      * @param nodeB
      */

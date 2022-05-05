@@ -9,10 +9,10 @@ import org.springframework.web.server.ResponseStatusException;
 import yelp.dataset.oswego.yelpbackend.algorithms.clustering.KMeans;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 
 public class RestService {
@@ -67,7 +67,7 @@ public class RestService {
         return d3Root;
     }
 
-    public List<NearestNodeModel> getClosestFourNodeList() throws IOException {
+    public List<WeightedNode> getClosestFourNodeList() throws IOException {
         return new IOService().readNearestNodesList();
     }
     public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {

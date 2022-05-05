@@ -18,8 +18,8 @@ import java.util.List;
 
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 @NoArgsConstructor
 public class IOService {
@@ -62,7 +62,7 @@ public class IOService {
      * @param nearestNodeList
      * @throws IOException
      */
-    protected void writeNearestNodesList(List<NearestNodeModel> nearestNodeList) throws IOException {
+    protected void writeNearestNodesList(List<WeightedNode> nearestNodeList) throws IOException {
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(neareastNodeFile));
         oos.writeObject(nearestNodeList);
         System.out.println("Successfully write nearest node list to nearestNodeList.bin.");
@@ -74,10 +74,10 @@ public class IOService {
      * @param businessBtree
      * @throws IOException
      */
-    protected List<NearestNodeModel> readNearestNodesList() throws IOException {
+    protected List<WeightedNode> readNearestNodesList() throws IOException {
         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(neareastNodeFile));
         try {
-            List<NearestNodeModel> nearestNodeList = (List<NearestNodeModel>) ois.readObject();
+            List<WeightedNode> nearestNodeList = (List<WeightedNode>) ois.readObject();
             ois.close();
             return nearestNodeList;
         } catch (ClassNotFoundException e) {
@@ -93,7 +93,7 @@ public class IOService {
      * @param businessBtree
      * @throws IOException
      */
-    protected void writeNodesWithEdges(NearestNodeModel nearestFourNode) throws IOException {
+    protected void writeNodesWithEdges(WeightedNode nearestFourNode) throws IOException {
         /*
          * This method will write 10,000 nodes to disk (disk usage = 40MBs in total). 
          * Storing each node is a file will help holding neccessary and needed node in memory rather than holding the whole 10000 nodes
@@ -136,14 +136,14 @@ public class IOService {
      * A function to read a graph node from disk
      * @throws IOException
      */
-    protected NearestNodeModel readNodesWithEdges(long targetNodeID) throws IOException {
+    protected WeightedNode readNodesWithEdges(long targetNodeID) throws IOException {
         List<WeightedEdge> edges = new ArrayList<>();
         Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".csv");
         Files.lines(path).forEach(line -> {
             String[] lineArray = line.split(",");
             edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2]), -9999.99));
         });
-        return new NearestNodeModel(targetNodeID, edges);
+        return new WeightedNode(targetNodeID, edges);
     }
 
     /**

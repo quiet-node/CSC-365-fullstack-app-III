@@ -12,7 +12,6 @@ public class RunnerService implements CommandLineRunner{
     
     @Override
     public void run(String... args) throws Exception {
-
         /**
          * This file here is show how to read and write files to disk
          * RUN IT ONCE THEN SCRAP IT
@@ -21,8 +20,6 @@ public class RunnerService implements CommandLineRunner{
         // /** READING/WRITING BTREE TO DISK */
         // new IOService().writeBtree(new JsonService().initBusinessBtree("{SYSTEM_PATH}/yelp-app/yelp-dataset/business.json"));
         // BusinessBtree businessBtree = new IOService().readBtree();
-
-       
     }
 }
 

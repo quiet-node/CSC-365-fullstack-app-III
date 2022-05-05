@@ -7,12 +7,12 @@ import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
+import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestNodeModel;
 
 public class GraphService {
 
@@ -22,9 +22,9 @@ public class GraphService {
      * @return List<NearestBusinessModel>
      * @throws IOException
      */
-    public List<NearestNodeModel> writeClosestFourToDataStore(int numberOfNodes) throws IOException {
+    public List<WeightedNode> writeClosestFourToDataStore(int numberOfNodes) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        List<NearestNodeModel> nearestNodesList = new ArrayList<>();
+        List<WeightedNode> nearestNodesList = new ArrayList<>();
         
         for (int i = 0; i < numberOfNodes; i++) {
             List<BusinessModel> closestFourBusinessModelList = new ArrayList<>();
@@ -45,12 +45,12 @@ public class GraphService {
                 WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), simRateWeight);
                 edges.add(weightedEdge);
             }
-            nearestNodesList.add(new NearestNodeModel(targetBusiness.getId(), edges));
+            nearestNodesList.add(new WeightedNode(targetBusiness.getId(), edges));
             
-            // write each node to disk -- this takes 4 minutes and 2.64 seconds to finish
+            // write each node to disk -- this takes 4 minutes to finish
             // new IOService().writeNodesWithEdges(nearestNodesList.get(i)); 
         }
-        // write whole list to disk -- this takes 24.09 seconds to finish
+        // write whole list to disk -- this takes 25.12 seconds to finish
         // new IOService().writeNearestNodesList(nearestNodesList);
         return nearestNodesList;
     }
@@ -64,7 +64,7 @@ public class GraphService {
      */
     public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
-        NearestNodeModel nearestNodeModel = new IOService().readNodesWithEdges(requestedBusinessModel.getId());
+        WeightedNode nearestNodeModel = new IOService().readNodesWithEdges(requestedBusinessModel.getId());
         List<BusinessModel> businessModelEdges = new ArrayList<>();
 
         nearestNodeModel.getEdges().forEach(edge -> {
@@ -86,7 +86,7 @@ public class GraphService {
      * @throws IOException
      */
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
-        List<NearestNodeModel> nearestNodeModels = new IOService().readNearestNodesList();
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = new DisjointUnionSets();
 
         nearestNodeModels.forEach(model -> {
