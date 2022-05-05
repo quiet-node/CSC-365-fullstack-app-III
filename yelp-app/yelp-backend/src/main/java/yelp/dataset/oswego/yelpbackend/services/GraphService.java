@@ -94,6 +94,7 @@ public class GraphService {
                 disjointUnionSets.unionDisjoinSets(sourceRoot, destinationRoot);
             });
         });
+
         List<Integer> rootSet = new ArrayList<>(new HashSet<Integer>(disjointUnionSets.getParent()));
 
         List<ConnectedComponenet> connectedComponenets = new ArrayList<>();
