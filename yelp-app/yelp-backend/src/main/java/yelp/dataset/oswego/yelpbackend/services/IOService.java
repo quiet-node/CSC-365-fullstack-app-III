@@ -100,7 +100,7 @@ public class IOService {
          * Using byte buffer from java NIO helps speeing up the writing operation.
          */
 
-        long targetNodeID = nearestFourNode.getRequestedNodeID();
+        long targetNodeID = nearestFourNode.getNodeID();
         // Get the file
         RandomAccessFile raf = new RandomAccessFile(edgesFilePath +"/node-"+targetNodeID+".csv", "rw");
         raf.seek(0);
@@ -141,7 +141,7 @@ public class IOService {
         Path path = FileSystems.getDefault().getPath(edgesFilePath, "node-"+targetNodeID+".csv");
         Files.lines(path).forEach(line -> {
             String[] lineArray = line.split(",");
-            edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2]), -9999.99));
+            edges.add(new WeightedEdge(Long.parseLong(lineArray[0]), Long.parseLong(lineArray[1]), Double.parseDouble(lineArray[2]), Double.parseDouble(lineArray[3])));
         });
         return new WeightedNode(targetNodeID, edges);
     }

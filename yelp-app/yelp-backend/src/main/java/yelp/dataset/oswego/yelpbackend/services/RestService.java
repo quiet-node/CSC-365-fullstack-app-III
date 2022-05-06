@@ -67,10 +67,14 @@ public class RestService {
         return d3Root;
     }
 
-    public List<WeightedNode> getClosestFourNodeList() throws IOException {
-        return new IOService().readNearestNodesList();
-    }
+
     public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
         return new GraphService().getClosestFourByBusinessName(requestedBusinessModel);
+    }
+    public WeightedNode getClosestFourByBusinessID(Long businessID) throws IOException {
+        return new IOService().readNodesWithEdges(businessID);
+    }
+    public List<WeightedNode> getClosestFourNodeList() throws IOException {
+        return new IOService().readNearestNodesList();
     }
 }
