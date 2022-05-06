@@ -22,12 +22,12 @@ public class GraphService {
      * @return List<NearestBusinessModel>
      * @throws IOException
      */
-    public List<WeightedNode> writeClosestFourToDataStore(int numberOfNodes) throws IOException {
+    public void writeClosestFourToDataStore(int numberOfNodes) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         List<WeightedNode> nearestNodesList = new ArrayList<>();
         
         for (int i = 0; i < numberOfNodes; i++) {
-            List<BusinessModel> closestFourBusinessModelList = new ArrayList<>();
+            List<BusinessModel> closestFourBusinessNodelList = new ArrayList<>();
             List<WeightedEdge> edges = new ArrayList<>();
             BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
             for (int j = 0; j < numberOfNodes; j++) {
@@ -35,12 +35,12 @@ public class GraphService {
                 if (targetBusiness.getId() != comparedBusiness.getId()){
                     double distanceWeight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
                     comparedBusiness.setDistance(distanceWeight);
-                    closestFourBusinessModelList.add(comparedBusiness);
+                    closestFourBusinessNodelList.add(comparedBusiness);
                 }
             }
-            Collections.sort(closestFourBusinessModelList, new BusinessModelComparator());
-            closestFourBusinessModelList = closestFourBusinessModelList.subList(0, 4);
-            for (BusinessModel businessModel : closestFourBusinessModelList) {
+            Collections.sort(closestFourBusinessNodelList, new BusinessModelComparator());
+            closestFourBusinessNodelList = closestFourBusinessNodelList.subList(0, 4);
+            for (BusinessModel businessModel : closestFourBusinessNodelList) {
                 double simRateWeight = new CosSim().calcSimRate(targetBusiness.getCategories(), businessModel.getCategories());
                 WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), simRateWeight);
                 edges.add(weightedEdge);
@@ -50,9 +50,8 @@ public class GraphService {
             // write each node to disk -- this takes 4 minutes to finish
             // new IOService().writeNodesWithEdges(nearestNodesList.get(i)); 
         }
-        // write whole list to disk -- this takes 25.12 seconds to finish
+        // write whole list to disk -- 23.58 seconds
         // new IOService().writeNearestNodesList(nearestNodesList);
-        return nearestNodesList;
     }
 
 
@@ -87,30 +86,41 @@ public class GraphService {
      */
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = new DisjointUnionSets();
+        DisjointUnionSets disjointUnionSets = getDisjoinSets(nearestNodeModels);
 
+        List<Integer> rootSet = new ArrayList<>(new HashSet<Integer>(disjointUnionSets.getParent()));
+        // System.out.println(rootSet);
+
+        List<ConnectedComponenet> connectedComponenets = new ArrayList<>();
+        for (int i = 0; i < rootSet.size(); i++) {
+            int root = rootSet.get(i);
+            List<WeightedNode> children = new ArrayList<>();
+                for (int j = 0; j < disjointUnionSets.getParent().size(); j++) {
+                    if (disjointUnionSets.getParent().get(j) == root) {
+                        children.add(new IOService().readNodesWithEdges(j));
+                    }
+                }
+            connectedComponenets.add(new ConnectedComponenet(root, children));
+        }
+
+        return connectedComponenets;
+    }
+
+
+    /**
+     * A helper function to set up the disjoint sets
+     * @param nearestNodeModels
+     * @return DisjointUnionSets
+     */
+    public DisjointUnionSets getDisjoinSets(List<WeightedNode> nearestNodeModels) {
+        DisjointUnionSets disjointUnionSets = new DisjointUnionSets();
         nearestNodeModels.forEach(model -> {
             model.getEdges().forEach(edge -> {
-                System.out.println(edge);
                 int sourceRoot = disjointUnionSets.findDisjointSet((int) edge.getSourceID());
                 int destinationRoot = disjointUnionSets.findDisjointSet((int) edge.getDestinationID());
                 disjointUnionSets.unionDisjoinSets(sourceRoot, destinationRoot);
             });
         });
-
-        List<Integer> rootSet = new ArrayList<>(new HashSet<Integer>(disjointUnionSets.getParent()));
-
-        List<ConnectedComponenet> connectedComponenets = new ArrayList<>();
-        for (int i = 0; i < rootSet.size(); i++) {
-            int root = rootSet.get(i);
-            List<Integer> children = new ArrayList<>();
-                for (int j = 0; j < disjointUnionSets.getParent().size(); j++) {
-                    if (disjointUnionSets.getParent().get(j) == root) {
-                        children.add(j);
-                    }
-                }
-            connectedComponenets.add(new ConnectedComponenet(root, children));
-        }
-        return connectedComponenets;
+        return disjointUnionSets;
     }
 }
