@@ -6,6 +6,8 @@ import java.io.IOException;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra.Graph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra.Node;
 import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
@@ -61,7 +63,7 @@ public class GraphService {
      * @return List<BusinessModel>
      * @throws IOException
      */
-    public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
+    public NearestBusinessModel fetchClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         WeightedNode nearestNodeModel = new IOService().readNodesWithEdges(requestedBusinessModel.getId());
         List<BusinessModel> businessModelEdges = new ArrayList<>();
@@ -87,7 +89,7 @@ public class GraphService {
      */
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = getDisjoinSets(nearestNodeModels);
+        DisjointUnionSets disjointUnionSets = setUpDisjoinSets(nearestNodeModels);
 
         // root set to find the total rootIDs
         Set<Integer> rootSet = new HashSet<>();
@@ -110,7 +112,49 @@ public class GraphService {
                 }
             connectedComponenets.add(new ConnectedComponenet(root, children));
         }
-        return connectedComponenets; 
+        // Check if all the neighbors are connected in one set
+        //System.out.println(checkConnectivity(disjointUnionSets, connectedComponenets));
+
+        return connectedComponenets;
+    }
+
+    /**
+     * Function to set up graph to prepare for dijkstra
+     * @param nodeID
+     * @return
+     * @throws IOException
+     */
+    public Graph setUpDijkstraGraph(int nodeID) throws IOException {
+        List<ConnectedComponenet> connectedComponenets = fetchConnectedComponents();
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = setUpDisjoinSets(nearestNodeModels);
+        Graph graph = new Graph();
+
+        ConnectedComponenet connectedComponent = getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
+        System.out.println(connectedComponent);
+
+        for (int connectedNodeID : connectedComponent.getChildren()) {
+            WeightedNode weightedNode = new IOService().readNodesWithEdges(connectedNodeID);
+            Node node = new Node(connectedNodeID);
+            weightedNode.getEdges().forEach(edge -> {
+                node.addDestination(new Node(edge.getDestinationID()), edge.getDistanceWeight());
+            });
+            graph.addNode(node);
+        }
+        return graph;
+    }
+
+    /**
+     * Function to get the connected component/disjoint set based on rootID
+     * @param connectedComponenets
+     * @param rootID
+     * @return ConnectedComponenet
+     */
+    public ConnectedComponenet getConnectedComponent(List<ConnectedComponenet> connectedComponenets, int rootID) {
+        for (ConnectedComponenet componenet : connectedComponenets) 
+            if (componenet.getRootID() == rootID) 
+                return componenet;
+        return null;
     }
 
 
@@ -120,7 +164,7 @@ public class GraphService {
      * @param nearestNodeModels
      * @return DisjointUnionSets
      */
-    public DisjointUnionSets getDisjoinSets(List<WeightedNode> nearestNodeModels) {
+    public DisjointUnionSets setUpDisjoinSets(List<WeightedNode> nearestNodeModels) {
         DisjointUnionSets disjointUnionSets = new DisjointUnionSets();
         nearestNodeModels.forEach(model -> {
             model.getEdges().forEach(edge -> {
