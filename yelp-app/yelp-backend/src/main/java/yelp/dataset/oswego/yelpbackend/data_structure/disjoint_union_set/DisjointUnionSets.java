@@ -1,9 +1,5 @@
 package yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import lombok.Data;
 
 @Data

@@ -4,11 +4,12 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ConnectedComponenet {
     private int rootID;
-    private List<WeightedNode> children;
+    private List<Integer> children;
 }

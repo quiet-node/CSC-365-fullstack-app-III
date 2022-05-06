@@ -96,7 +96,7 @@ public class BusinessController {
 
     @GetMapping("/graph/fetch/connected-components")
     public ResponseEntity<List<ConnectedComponenet>> connectivityCheck() throws IOException{
-        return new ResponseEntity<>(new GraphService().fetchConnectedComponents(), HttpStatus.OK);
+        return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
 
 }
