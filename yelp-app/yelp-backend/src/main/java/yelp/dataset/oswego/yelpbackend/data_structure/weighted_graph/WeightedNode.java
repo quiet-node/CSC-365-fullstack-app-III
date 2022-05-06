@@ -9,6 +9,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class WeightedNode implements Serializable {
-    private long requestedNodeID;
+    private long nodeID;
     private List<WeightedEdge> edges;
 }
