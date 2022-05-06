@@ -8,13 +8,13 @@ import lombok.Data;
 
 @Data
 public class DisjointUnionSets {
-    private List<Integer> parent, size;
+    private int[] parent, size;
     private int maxComponents;
 
     public DisjointUnionSets() {
         this.maxComponents = 10000;
-        parent = new ArrayList<>(Collections.nCopies(maxComponents, 0));
-        size = new ArrayList<>(Collections.nCopies(maxComponents, 0));
+        parent = new int[maxComponents];
+        size = new int[maxComponents];;
         initializeDisjoinSet();
     }
 
@@ -24,8 +24,8 @@ public class DisjointUnionSets {
      */
     private void initializeDisjoinSet() {
         for (int i = 0; i < maxComponents; i++) {
-            parent.set(i, i);
-            size.set(i, 1);
+            parent[i]= i;
+            size[i]= 1;
         };
     }
 
@@ -36,10 +36,10 @@ public class DisjointUnionSets {
      */
     public int findDisjointSet(int targetNode) {
         // if the targetNode is its own parent => the representative
-        if (targetNode == parent.get(targetNode)) return targetNode;
+        if (targetNode == parent[targetNode]) return targetNode;
 
         // if not, first compress the path then recursively claim up to find the root node => the representative
-        return parent.set(targetNode, findDisjointSet(parent.get(targetNode)));
+        return parent[targetNode] = findDisjointSet(parent[targetNode]);
     }
 
     /**
@@ -54,21 +54,13 @@ public class DisjointUnionSets {
         if (nodeA == nodeB) return;
 
         if (nodeA != nodeB) {
-            if (size.get(nodeA) < size.get(nodeB)) {
-                parent.set(nodeA, nodeB);
-                size.set(nodeB, size.get(nodeB) + 1);
-            } else if (size.get(nodeA) > size.get(nodeB) ){
-                parent.set(nodeB, nodeA);
-                size.set(nodeA, size.get(nodeA) + 1);
+            if (size[nodeA] > size[nodeB]) {
+                parent[nodeB] = nodeA;
+                size[nodeA] += 1;
             } else {
-                if (nodeA < nodeB) {
-                    parent.set(nodeA, nodeB);
-                    size.set(nodeB, size.get(nodeB) + 1);
-                } else {
-                    parent.set(nodeB, nodeA);
-                    size.set(nodeA, size.get(nodeA) + 1);
-                }
-            }
+                parent[nodeA] = nodeB;
+                size[nodeB] += 1;
+            } 
         }
     }
 }

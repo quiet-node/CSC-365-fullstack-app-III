@@ -10,5 +10,5 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNod
 @AllArgsConstructor
 public class ConnectedComponenet {
     private int rootID;
-    private List<WeightedNode> children;
+    private List<Integer> children;
 }

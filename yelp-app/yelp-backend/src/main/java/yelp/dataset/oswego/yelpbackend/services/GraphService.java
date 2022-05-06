@@ -1,6 +1,7 @@
 package yelp.dataset.oswego.yelpbackend.services;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.io.IOException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
@@ -83,32 +84,40 @@ public class GraphService {
      * Using union-find algorithm to find connected components (subsets)
      * @return List<ConnectedComponenet>
      * @throws IOException
+     * @throws InterruptedException
      */
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = getDisjoinSets(nearestNodeModels);
 
-        List<Integer> rootSet = new ArrayList<>(new HashSet<Integer>(disjointUnionSets.getParent()));
-        // System.out.println(rootSet);
+        // root set to find the total rootIDs
+        Set<Integer> rootSet = new HashSet<>();
+        for (int i = 0; i < 10000; i++) {
+            rootSet.add(disjointUnionSets.findDisjointSet(i));
+        }
+
+        // turn rootSet from a HashSet to an ArrayList for easy implementations
+        List<Integer> rootNodes = new ArrayList<>(new HashSet<Integer>(rootSet));
 
         List<ConnectedComponenet> connectedComponenets = new ArrayList<>();
+
         for (int i = 0; i < rootSet.size(); i++) {
-            int root = rootSet.get(i);
-            List<WeightedNode> children = new ArrayList<>();
-                for (int j = 0; j < disjointUnionSets.getParent().size(); j++) {
-                    if (disjointUnionSets.getParent().get(j) == root) {
-                        children.add(new IOService().readNodesWithEdges(j));
+            int root = rootNodes.get(i);
+            List<Integer> children = new ArrayList<>();
+                for (int j = 0; j < 10000; j++) {
+                    if (disjointUnionSets.findDisjointSet(j) == root) {
+                        children.add(j);
                     }
                 }
             connectedComponenets.add(new ConnectedComponenet(root, children));
         }
-
         return connectedComponenets;
     }
 
 
     /**
      * A helper function to set up the disjoint sets
+     * This will read in each edge (neighbors), then union the nodes to form up disjoin sets
      * @param nearestNodeModels
      * @return DisjointUnionSets
      */
