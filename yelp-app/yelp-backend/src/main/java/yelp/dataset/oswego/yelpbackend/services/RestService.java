@@ -12,6 +12,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 
 
@@ -69,7 +70,7 @@ public class RestService {
 
 
     public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
-        return new GraphService().getClosestFourByBusinessName(requestedBusinessModel);
+        return new GraphService().fetchClosestFourByBusinessName(requestedBusinessModel);
     }
     public WeightedNode getClosestFourByBusinessID(Long businessID) throws IOException {
         return new IOService().readNodesWithEdges(businessID);
@@ -77,4 +78,8 @@ public class RestService {
     public List<WeightedNode> getClosestFourNodeList() throws IOException {
         return new IOService().readNearestNodesList();
     }
+    public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
+        return new GraphService().fetchConnectedComponents();
+    }
+
 }
