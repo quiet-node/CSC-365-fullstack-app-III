@@ -42,6 +42,7 @@ In development...
   - [Kraskal's Algorithm -- cp-algo](https://cp-algorithms.com/graph/mst_kruskal.html)
   - [MST and Kraskal's Algorithm -- cp-algo](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html)
   - [Haversine implementation -- geeksforgeeks](https://www.geeksforgeeks.org/haversine-formula-to-find-distance-between-two-points-on-a-sphere/)
+  - [Dijkstra's algorithm](https://www.baeldung.com/java-dijkstra)
 
 ### Version 2.0
   - [Yelp Dataset -- yelp](https://www.yelp.com/dataset)
