@@ -131,4 +131,31 @@ public class GraphService {
         });
         return disjointUnionSets;
     }
+
+    /**
+     * Util method to check connectivity neighbors in each disjoint set
+     * Just a helper, not neccessary
+     * @param disjointUnionSets
+     * @param connectedComponenets
+     * @return
+     * @throws IOException
+     */
+    public boolean checkConnectivity(DisjointUnionSets disjointUnionSets, List<ConnectedComponenet> connectedComponenets) throws IOException {
+        for (ConnectedComponenet componenet : connectedComponenets) {
+            int rootID = componenet.getRootID();
+            List<Integer> neighbors = new ArrayList<>();
+            for (Integer child : componenet.getChildren()) {
+                new IOService().readNodesWithEdges(child).getEdges().forEach(edge -> {
+                    neighbors.add((int) edge.getDestinationID());
+                });
+                for (int id : neighbors) {
+                    if (disjointUnionSets.findDisjointSet(id) != rootID) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 }
