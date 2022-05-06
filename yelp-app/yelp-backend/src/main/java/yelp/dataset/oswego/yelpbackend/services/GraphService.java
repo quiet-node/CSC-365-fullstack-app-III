@@ -1,7 +1,6 @@
 package yelp.dataset.oswego.yelpbackend.services;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.io.IOException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
@@ -103,10 +102,10 @@ public class GraphService {
 
         for (int i = 0; i < rootSet.size(); i++) {
             int root = rootNodes.get(i);
-            List<WeightedNode> children = new ArrayList<>();
+            List<Integer> children = new ArrayList<>();
                 for (int j = 0; j < 10000; j++) {
                     if (disjointUnionSets.findDisjointSet(j) == root) {
-                        children.add(new IOService().readNodesWithEdges(j));
+                        children.add(j);
                     }
                 }
             connectedComponenets.add(new ConnectedComponenet(root, children));
