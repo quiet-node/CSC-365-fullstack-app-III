@@ -103,15 +103,15 @@ public class GraphService {
 
         for (int i = 0; i < rootSet.size(); i++) {
             int root = rootNodes.get(i);
-            List<Integer> children = new ArrayList<>();
+            List<WeightedNode> children = new ArrayList<>();
                 for (int j = 0; j < 10000; j++) {
                     if (disjointUnionSets.findDisjointSet(j) == root) {
-                        children.add(j);
+                        children.add(new IOService().readNodesWithEdges(j));
                     }
                 }
             connectedComponenets.add(new ConnectedComponenet(root, children));
         }
-        return connectedComponenets;
+        return connectedComponenets; 
     }
 
 
