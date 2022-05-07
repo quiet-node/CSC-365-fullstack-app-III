@@ -2,10 +2,12 @@ package yelp.dataset.oswego.yelpbackend.algorithms.dijkstra;
 
 import java.util.*;
 
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
+
 public class Node {
 
     private Long nodeID;
-    private List<Node> shortestPath = new ArrayList<>();
+    private List<ShortestPath> shortestPath = new ArrayList<>();
     private Double distance = Double.MAX_VALUE;
     Map<Node, Double> adjacentNodes = new HashMap<>();
         
@@ -42,11 +44,11 @@ public class Node {
         this.distance = distance;
     }
 
-    public List<Node> getShortestPath() {
+    public List<ShortestPath> getShortestPath() {
         return shortestPath;
     }
 
-    public void setShortestPath(LinkedList<Node> shortestPath) {
+    public void setShortestPath(LinkedList<ShortestPath> shortestPath) {
         this.shortestPath = shortestPath;
     }
 

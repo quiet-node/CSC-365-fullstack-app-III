@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import lombok.Data;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
 @Data
 public class Dijkstra {
@@ -49,9 +50,10 @@ public class Dijkstra {
         Double sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeight);
-            LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
-            shortestPath.add(sourceNode);
-            evaluationNode.setShortestPath(shortestPath);
+            LinkedList<ShortestPath> shortestPaths = new LinkedList<>(sourceNode.getShortestPath());
+            ShortestPath shortestPath = new ShortestPath(sourceNode.getNodeID(), sourceDistance + edgeWeight);
+            shortestPaths.add(shortestPath);
+            evaluationNode.setShortestPath(shortestPaths);
         }
     }
 }
