@@ -161,11 +161,10 @@ public class GraphService {
         DijkstraNode source = graph.getNodeByNodeID(nodeID);
 
         graph = new Dijkstra().calculateShortestPathFromSource(graph, source);
-        // graph.getNodes().forEach(node -> {
-        //     System.out.println();
-        //     System.out.println(node);
-        // });
-        
+        graph.getNodes().forEach(node -> {
+            System.out.println();
+            System.out.println(node);
+        });
         return graph;
     }
 

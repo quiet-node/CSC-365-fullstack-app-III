@@ -99,8 +99,8 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
     @GetMapping("/graph/fetch/graph/{businessID}")
-    public ResponseEntity<DijkstraGraph> getGraph(@PathVariable int businessID) throws IOException{
-        return new ResponseEntity<>(new RestService().fetchGraph(businessID), HttpStatus.OK);
+    public ResponseEntity<DijkstraGraph> getGraphByNodeID(@PathVariable int businessID) throws IOException{
+        return new ResponseEntity<>(new RestService().fetchGraphByGraphID(businessID), HttpStatus.OK);
     }
 
 }

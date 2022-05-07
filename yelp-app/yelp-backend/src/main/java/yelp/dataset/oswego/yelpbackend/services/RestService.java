@@ -82,8 +82,9 @@ public class RestService {
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         return new GraphService().fetchConnectedComponents();
     }
-    public DijkstraGraph fetchGraph(int nodeID) throws IOException {
-        return new GraphService().setUpDijkstraGraph(nodeID);
+    public DijkstraGraph fetchGraphByGraphID(int nodeID) throws IOException {
+        DijkstraGraph graph = new GraphService().setUpDijkstraGraph(nodeID);
+        return null;
     }
 
 }
