@@ -8,6 +8,14 @@ import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNod
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestNode;
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
+
 @Data
 public class Dijkstra {
 

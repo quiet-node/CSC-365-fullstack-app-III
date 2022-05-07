@@ -21,6 +21,14 @@ import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
+
 @NoArgsConstructor
 public class IOService {
     private final String bTreeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";

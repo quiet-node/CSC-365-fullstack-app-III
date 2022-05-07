@@ -16,7 +16,17 @@ import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
+
+
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
 
 public class GraphService {
 
@@ -84,6 +94,15 @@ public class GraphService {
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
     }
 
+    public ShortestPath getShortestPath(int sourceNodeID, int destinationNodeID) throws IOException {
+        DijkstraGraph dijkstraGraph = setUpDijkstraGraph(sourceNodeID);
+        for (DijkstraNode node : dijkstraGraph.getNodes()) {
+            if (node.getNodeID() == destinationNodeID) {
+                return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
+            }
+        }
+        return null;
+    }
 
     /**
      * Function to set up graph to run dijkstra

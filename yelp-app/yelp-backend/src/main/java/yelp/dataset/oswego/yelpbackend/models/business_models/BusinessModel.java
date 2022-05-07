@@ -17,6 +17,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="yelp")
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
+
 public class BusinessModel implements Comparable<BusinessModel>, Serializable{
     @Id
     private long id;

@@ -6,6 +6,14 @@ import java.util.HashSet;
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.hash_table.HashTable;
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
+
 @NoArgsConstructor
 public class CosSim {
     private double cosSimRate;

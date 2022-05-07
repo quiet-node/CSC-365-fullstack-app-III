@@ -15,16 +15,19 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNod
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
 
 public class RestService {
-    /**
-     * A function to get the similar businesses to the target business
-     * @param allBusinesses
-     * @param targetB
-     * @return a list of similar businesses
-     */
+
     public List<BusinessModel> getSimilarBusinesses(List<BusinessModel> allBusinesses , BusinessModel targetB) {
         List<BusinessModel> similarBusinesses = new ArrayList<BusinessModel>();
         CosSim cosSim = new CosSim();
@@ -41,11 +44,6 @@ public class RestService {
         return similarBusinesses;
     }
 
-    /**
-     * A function to fetch random clusters
-     * @return clusters
-     * @throws IOException
-     */
     public Map<String, List<BusinessModel>> fetchClusters() throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         
@@ -56,11 +54,6 @@ public class RestService {
         return clusters;
     }
 
-    /**
-     * A function to build the right JSON strcuture for D3
-     * @return root JSON structure for D3
-     * @throws IOException
-     */
     public BusinessD3RootModel prepareD3() throws IOException {
         BusinessBtree businessBtree = new IOService().readBtree();
         BusinessD3RootModel d3Root = new KMeans().prepareD3(businessBtree, new Random().nextInt(10)+5);
@@ -70,21 +63,33 @@ public class RestService {
         return d3Root;
     }
 
-
     public NearestBusinessModel getClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
         return new GraphService().fetchClosestFourByBusinessName(requestedBusinessModel);
     }
+    
     public WeightedNode getClosestFourByBusinessID(Long businessID) throws IOException {
         return new IOService().readNodesWithEdges(businessID);
     }
+
     public List<WeightedNode> getClosestFourNodeList() throws IOException {
         return new IOService().readNearestNodesList();
     }
+
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         return new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
     }
+
+    public ShortestPath fetchShortestPath(int sourceNodeID, int destinationNodeID) throws IOException {
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
+        if (disjointUnionSets.findDisjointSet(sourceNodeID) != disjointUnionSets.findDisjointSet(destinationNodeID))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Businesses are not connected"); 
+
+        return new GraphService().getShortestPath(sourceNodeID, destinationNodeID);
+    }
+
     public DijkstraGraph fetchGraphByGraphID(int nodeID) throws IOException {
         new GraphService().setUpDijkstraGraph(nodeID);
         return null;

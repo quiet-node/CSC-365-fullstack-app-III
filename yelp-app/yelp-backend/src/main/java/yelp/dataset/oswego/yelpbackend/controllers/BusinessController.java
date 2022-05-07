@@ -19,10 +19,19 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNod
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
+
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
 
 @RestController
 @RequestMapping("/yelpdata")
@@ -98,8 +107,12 @@ public class BusinessController {
     public ResponseEntity<List<ConnectedComponenet>> connectivityCheck() throws IOException{
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
+    @GetMapping("/graph/fetch/graph/shortest-path/{sourceNodeID}/{destinationNodeID}")
+    public ResponseEntity<ShortestPath> fetchShortestPath(@PathVariable int sourceNodeID, @PathVariable int destinationNodeID) throws IOException{
+        return new ResponseEntity<>(new RestService().fetchShortestPath(sourceNodeID, destinationNodeID), HttpStatus.OK);
+    }
     @GetMapping("/graph/fetch/graph/{businessID}")
-    public ResponseEntity<DijkstraGraph> getGraphByNodeID(@PathVariable int businessID) throws IOException{
+    public ResponseEntity<DijkstraGraph> fetchGraphByNodeID(@PathVariable int businessID) throws IOException{
         return new ResponseEntity<>(new RestService().fetchGraphByGraphID(businessID), HttpStatus.OK);
     }
 

@@ -3,6 +3,13 @@ package yelp.dataset.oswego.yelpbackend.data_structure.hash_table;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * @author: Nam (Logan) Nguyen
+ * @college: SUNY Oswego
+ * @since Spring 2022
+ * @version 3.0
+ * @link: https://github.com/lgad31vn/CSC-365
+ */
 
 /* 
     DESCRIPTION: Hash Table is an array of LinkedList, and each node::LinkedList is an instance of a hashmap contains key:frequency.
