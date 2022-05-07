@@ -3,8 +3,11 @@ package yelp.dataset.oswego.yelpbackend.algorithms.dijkstra;
 import java.util.*;
 import java.util.Map.Entry;
 
+import lombok.Data;
 
+@Data
 public class Dijkstra {
+
     public Graph calculateShortestPathFromSource(Graph graph, Node source) {
         source.setDistance(0.0);
     
@@ -29,7 +32,7 @@ public class Dijkstra {
         return graph;
     }
 
-    private Node getLowestDistanceNode(List<Node> unsettledNodes) {
+    private static Node getLowestDistanceNode(List<Node> unsettledNodes) {
         Node lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
         for (Node node: unsettledNodes) {
@@ -42,7 +45,7 @@ public class Dijkstra {
         return lowestDistanceNode;
     }
 
-    private void calculateMinimumDistance(Node evaluationNode, Double edgeWeight, Node sourceNode) {
+    private static void calculateMinimumDistance(Node evaluationNode, Double edgeWeight, Node sourceNode) {
         Double sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeight);

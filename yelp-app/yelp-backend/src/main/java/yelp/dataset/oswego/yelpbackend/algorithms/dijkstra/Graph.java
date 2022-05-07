@@ -6,14 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class Graph {
-    private List<Node> nodeList = new ArrayList<>();
-    
-    public void addNode(Node node) {nodeList.add(node);};
-
+    private List<Node> nodes = new ArrayList<>();
+    public void addNode(Node node) {nodes.add(node);};
     public Node getNodeByNodeID(long nodeID) {
-        for(Node node : nodeList) 
+        for(Node node : nodes) 
             if (node.getNodeID() == nodeID) 
                 return node;
         return null;
