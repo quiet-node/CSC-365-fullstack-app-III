@@ -3,12 +3,12 @@ package yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph;
 import java.util.*;
 
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestNode;
 
 public class DijkstraNode {
 
     private Long nodeID;
-    private List<ShortestPath> shortestPath = new ArrayList<>();
+    private List<ShortestNode> shortestPath = new ArrayList<>();
     private Double weight = Double.MAX_VALUE;
     List<NeighborNode> neighborNodes = new ArrayList<>();
         
@@ -45,11 +45,11 @@ public class DijkstraNode {
         this.weight = weight;
     }
 
-    public List<ShortestPath> getShortestPath() {
+    public List<ShortestNode> getShortestPath() {
         return shortestPath;
     }
 
-    public void setShortestPath(LinkedList<ShortestPath> shortestPath) {
+    public void setShortestPath(LinkedList<ShortestNode> shortestPath) {
         this.shortestPath = shortestPath;
     }
 

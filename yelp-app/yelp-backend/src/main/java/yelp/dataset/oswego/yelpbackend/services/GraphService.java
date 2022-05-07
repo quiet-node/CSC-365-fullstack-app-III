@@ -59,6 +59,7 @@ public class GraphService {
     }
 
 
+
     /**
      * Find four geographically nearest businesses based on business name
      * @param requestedBusinessModel
@@ -83,8 +84,9 @@ public class GraphService {
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
     }
 
+
     /**
-     * Function to set up graph to prepare for dijkstra
+     * Function to set up graph to run dijkstra
      * @param nodeID
      * @return
      * @throws IOException

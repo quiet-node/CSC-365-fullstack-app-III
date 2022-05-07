@@ -6,7 +6,7 @@ import lombok.Data;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestNode;
 
 @Data
 public class Dijkstra {
@@ -76,8 +76,8 @@ public class Dijkstra {
         Double sourceDistance = sourceNode.getWeight();
         if (sourceDistance + edgeWeight < evaluationNode.getWeight()) {
             evaluationNode.setWeight(sourceDistance + edgeWeight);
-            LinkedList<ShortestPath> shortestPaths = new LinkedList<>(sourceNode.getShortestPath());
-            ShortestPath shortestPath = new ShortestPath(sourceNode.getNodeID(), sourceDistance + edgeWeight);
+            LinkedList<ShortestNode> shortestPaths = new LinkedList<>(sourceNode.getShortestPath());
+            ShortestNode shortestPath = new ShortestNode(sourceNode.getNodeID(), sourceDistance + edgeWeight);
             shortestPaths.add(shortestPath);
             evaluationNode.setShortestPath(shortestPaths);
         }

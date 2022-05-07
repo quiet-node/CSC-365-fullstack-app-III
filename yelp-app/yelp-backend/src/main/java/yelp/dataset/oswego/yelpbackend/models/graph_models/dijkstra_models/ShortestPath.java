@@ -1,11 +1,12 @@
 package yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class ShortestPath {
-    private Long nodeID;
-    private double weight;
+    private Long sourceNodeID;
+    private Long destiantionNodeID;
+    private List<ShortestNode> shortestPath;
 }
