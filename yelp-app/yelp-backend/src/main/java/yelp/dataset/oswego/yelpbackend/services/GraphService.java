@@ -126,25 +126,38 @@ public class GraphService {
      * @throws IOException
      */
     public Graph setUpDijkstraGraph(int nodeID) throws IOException {
-        List<ConnectedComponenet> connectedComponenets = fetchConnectedComponents();
+        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents();
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = setUpDisjoinSets(nearestNodeModels);
-        Graph graph = new Graph();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
 
-        ConnectedComponenet connectedComponent = getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
+        ConnectedComponenet connectedComponent = new GraphService().getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
+
+        List<Node> graphNodes = new ArrayList<>();
 
         for (int connectedNodeID : connectedComponent.getChildren()) {
-            WeightedNode weightedNode = new IOService().readNodesWithEdges(connectedNodeID);
-            Node node = new Node(connectedNodeID);
-            weightedNode.getEdges().forEach(edge -> {
-                node.addDestination(new Node(edge.getDestinationID()), edge.getDistanceWeight());
-            });
-            graph.addNode(node);
+            graphNodes.add(new Node(connectedNodeID));
         }
 
-        Node rootNode = graph.getNodeByNodeID(nodeID);
+        Graph graph = new Graph();
 
-        // graph = new Dijkstra().calculateShortestPathFromSource(graph, rootNode);
+        for (Node node : graphNodes) {
+            WeightedNode weightedNode = new IOService().readNodesWithEdges(node.getNodeID());
+            for (WeightedEdge edge : weightedNode.getEdges()) {
+                Node neighbor = new Node();
+                for (Node graphNode : graphNodes) {
+                    if (graphNode.getNodeID() == edge.getDestinationID()) 
+                        neighbor = graphNode;
+                }
+                node.addDestination(neighbor, edge.getDistanceWeight());
+                neighbor.addDestination(node, edge.getDistanceWeight());
+            }
+        }
+
+        for (Node node : graphNodes) graph.addNode(node);
+
+        Node source = graph.getNodeByNodeID(nodeID);
+
+        graph = new Dijkstra().calculateShortestPathFromSource(graph, source);
         
         return graph;
     }
