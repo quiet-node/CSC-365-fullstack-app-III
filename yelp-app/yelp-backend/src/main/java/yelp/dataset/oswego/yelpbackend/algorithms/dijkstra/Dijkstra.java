@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import lombok.Data;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Graph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Node;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
 @Data

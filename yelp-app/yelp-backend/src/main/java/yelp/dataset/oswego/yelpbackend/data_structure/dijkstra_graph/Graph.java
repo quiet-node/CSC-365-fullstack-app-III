@@ -1,4 +1,4 @@
-package yelp.dataset.oswego.yelpbackend.algorithms.dijkstra;
+package yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph;
 
 import java.util.*;
 

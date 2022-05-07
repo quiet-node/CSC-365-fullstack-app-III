@@ -4,11 +4,11 @@ import java.util.*;
 import java.io.IOException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
-import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Graph;
-import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Node;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Graph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Node;
 import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
