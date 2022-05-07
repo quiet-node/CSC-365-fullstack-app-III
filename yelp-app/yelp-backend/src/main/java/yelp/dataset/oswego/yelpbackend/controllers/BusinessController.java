@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Graph;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
@@ -97,6 +98,10 @@ public class BusinessController {
     @GetMapping("/graph/fetch/connected-components")
     public ResponseEntity<List<ConnectedComponenet>> connectivityCheck() throws IOException{
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
+    }
+    @GetMapping("/graph/fetch/graph/{businessID}")
+    public ResponseEntity<Graph> getGraph(@PathVariable int businessID) throws IOException{
+        return new ResponseEntity<>(new RestService().fetchGraph(businessID), HttpStatus.OK);
     }
 
 }

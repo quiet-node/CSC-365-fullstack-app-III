@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.clustering.KMeans;
+import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Graph;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
@@ -80,6 +81,9 @@ public class RestService {
     }
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
         return new GraphService().fetchConnectedComponents();
+    }
+    public Graph fetchGraph(int nodeID) throws IOException {
+        return new GraphService().setUpDijkstraGraph(nodeID);
     }
 
 }
