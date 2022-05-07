@@ -4,4 +4,4 @@ yelp-app/yelp-datastore-files/business-nodes/*.csv
 yelp-app/.DS_Store
 yelp-app/yelp-datastore-files/.DS_Store
 yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin
-yelp-app/yelp-dataset/businessSmall.json
+yelp-app/yelp-dataset/*.json
