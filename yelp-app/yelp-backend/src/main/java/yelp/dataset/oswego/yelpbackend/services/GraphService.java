@@ -144,7 +144,7 @@ public class GraphService {
 
         Node rootNode = graph.getNodeByNodeID(nodeID);
 
-        graph = new Dijkstra().calculateShortestPathFromSource(graph, new Node(nodeID));
+        // graph = new Dijkstra().calculateShortestPathFromSource(graph, rootNode);
         
         return graph;
     }
