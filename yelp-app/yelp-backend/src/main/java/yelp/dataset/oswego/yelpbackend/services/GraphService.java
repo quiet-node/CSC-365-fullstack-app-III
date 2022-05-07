@@ -84,14 +84,66 @@ public class GraphService {
     }
 
     /**
-     * Using union-find algorithm to find connected components (subsets)
+     * Function to set up graph to prepare for dijkstra
+     * @param nodeID
+     * @return
+     * @throws IOException
+     */
+    public DijkstraGraph setUpDijkstraGraph(int nodeID) throws IOException {
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
+
+        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
+
+        // get specific disjoint set
+        ConnectedComponenet connectedComponent = new GraphService().getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
+
+        // a list of all the nodes prepare for the graph for dijkstra
+        List<DijkstraNode> graphNodes = new ArrayList<>();
+
+        for (int connectedNodeID : connectedComponent.getChildren()) {
+            graphNodes.add(new DijkstraNode(connectedNodeID));
+        }
+
+        DijkstraGraph graph = new DijkstraGraph();
+
+        for (DijkstraNode node : graphNodes) {
+            // Now each node is already written on disk (csv files), use IOService to retrieve each node with their neighbors
+            WeightedNode weightedNode = new IOService().readNodesWithEdges(node.getNodeID());
+
+            for (WeightedEdge edge : weightedNode.getEdges()) {
+                DijkstraNode destinationNode = new DijkstraNode();
+                for (DijkstraNode graphNode : graphNodes) {
+                    if (graphNode.getNodeID() == edge.getDestinationID()) 
+                    destinationNode = graphNode;
+                }
+                NeighborNode sourceNeighborNode = new NeighborNode(destinationNode, edge.getDistanceWeight(), edge.getSimilarityWeight());
+                NeighborNode destinationNeighborNode = new NeighborNode(node, edge.getDistanceWeight(), edge.getSimilarityWeight());
+                node.addDestination(sourceNeighborNode);
+                if (!destinationNode.getNeighborNodes().contains(destinationNeighborNode)) 
+                    destinationNode.addDestination(destinationNeighborNode);
+            }
+        }
+
+        // Since each node needs to finish their full circle of adding-neighbors-process, it needs its own loop
+        for (DijkstraNode node : graphNodes) graph.addNode(node);
+
+        // apply Dijkstra to the graph
+        graph = new Dijkstra().calculateShortestPathFromSource(graph, graph.getNodeByNodeID(nodeID));
+        graph.getNodes().forEach(node -> {
+            System.out.println();
+            System.out.println(node);
+        });
+        return graph;
+    }
+
+    /**
+     * Using union-find algorithm to find connected components (subsets/disjoint sets)
      * @return List<ConnectedComponenet>
      * @throws IOException
      * @throws InterruptedException
      */
-    public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
-        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = setUpDisjoinSets(nearestNodeModels);
+    public List<ConnectedComponenet> fetchConnectedComponents(List<WeightedNode> nearestNodeModels, DisjointUnionSets disjointUnionSets) throws IOException {
 
         // root set to find the total rootIDs
         Set<Integer> rootSet = new HashSet<>();
@@ -114,58 +166,10 @@ public class GraphService {
                 }
             connectedComponenets.add(new ConnectedComponenet(root, children));
         }
-        // Check if all the neighbors are connected in one set
+        // Check if all the neighbors are connected in one set -- not neccessary but make sure uninon-find works correctly
         //System.out.println(checkConnectivity(disjointUnionSets, connectedComponenets));
 
         return connectedComponenets;
-    }
-
-    /**
-     * Function to set up graph to prepare for dijkstra
-     * @param nodeID
-     * @return
-     * @throws IOException
-     */
-    public DijkstraGraph setUpDijkstraGraph(int nodeID) throws IOException {
-        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents();
-        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
-
-        ConnectedComponenet connectedComponent = new GraphService().getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
-
-        List<DijkstraNode> graphNodes = new ArrayList<>();
-
-        for (int connectedNodeID : connectedComponent.getChildren()) {
-            graphNodes.add(new DijkstraNode(connectedNodeID));
-        }
-
-        DijkstraGraph graph = new DijkstraGraph();
-
-        for (DijkstraNode node : graphNodes) {
-            WeightedNode weightedNode = new IOService().readNodesWithEdges(node.getNodeID());
-            for (WeightedEdge edge : weightedNode.getEdges()) {
-                DijkstraNode destinationNode = new DijkstraNode();
-                for (DijkstraNode graphNode : graphNodes) {
-                    if (graphNode.getNodeID() == edge.getDestinationID()) 
-                    destinationNode = graphNode;
-                }
-                NeighborNode sourceNeighborNode = new NeighborNode(destinationNode, edge.getDistanceWeight(), edge.getSimilarityWeight());
-                NeighborNode destinationNeighborNode = new NeighborNode(node, edge.getDistanceWeight(), edge.getSimilarityWeight());
-                node.addDestination(sourceNeighborNode);
-                destinationNode.addDestination(destinationNeighborNode);
-            }
-        }
-
-        for (DijkstraNode node : graphNodes) graph.addNode(node);
-
-        DijkstraNode source = graph.getNodeByNodeID(nodeID);
-
-        graph = new Dijkstra().calculateShortestPathFromSource(graph, source);
-        graph.getNodes().forEach(node -> {
-            System.out.println();
-            System.out.println(node);
-        });
-        return graph;
     }
 
 
