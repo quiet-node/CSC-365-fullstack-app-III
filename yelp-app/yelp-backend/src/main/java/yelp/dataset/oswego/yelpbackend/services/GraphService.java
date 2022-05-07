@@ -15,6 +15,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdg
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 
 public class GraphService {
@@ -143,13 +144,15 @@ public class GraphService {
         for (DijkstraNode node : graphNodes) {
             WeightedNode weightedNode = new IOService().readNodesWithEdges(node.getNodeID());
             for (WeightedEdge edge : weightedNode.getEdges()) {
-                DijkstraNode neighbor = new DijkstraNode();
+                DijkstraNode destinationNode = new DijkstraNode();
                 for (DijkstraNode graphNode : graphNodes) {
                     if (graphNode.getNodeID() == edge.getDestinationID()) 
-                        neighbor = graphNode;
+                    destinationNode = graphNode;
                 }
-                node.addDestination(neighbor, edge.getDistanceWeight());
-                neighbor.addDestination(node, edge.getDistanceWeight());
+                NeighborNode sourceNeighborNode = new NeighborNode(destinationNode, edge.getDistanceWeight(), edge.getSimilarityWeight());
+                NeighborNode destinationNeighborNode = new NeighborNode(node, edge.getDistanceWeight(), edge.getSimilarityWeight());
+                node.addDestination(sourceNeighborNode);
+                destinationNode.addDestination(destinationNeighborNode);
             }
         }
 
@@ -158,10 +161,10 @@ public class GraphService {
         DijkstraNode source = graph.getNodeByNodeID(nodeID);
 
         graph = new Dijkstra().calculateShortestPathFromSource(graph, source);
-        graph.getNodes().forEach(node -> {
-            System.out.println();
-            System.out.println(node);
-        });
+        // graph.getNodes().forEach(node -> {
+        //     System.out.println();
+        //     System.out.println(node);
+        // });
         
         return graph;
     }

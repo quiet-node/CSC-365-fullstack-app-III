@@ -2,6 +2,7 @@ package yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph;
 
 import java.util.*;
 
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
 public class DijkstraNode {
@@ -9,15 +10,15 @@ public class DijkstraNode {
     private Long nodeID;
     private List<ShortestPath> shortestPath = new ArrayList<>();
     private Double distance = Double.MAX_VALUE;
-    Map<DijkstraNode, Double> adjacentNodes = new HashMap<>();
+    List<NeighborNode> neighborNodes = new ArrayList<>();
         
     public DijkstraNode (){};
     public DijkstraNode(long sourceID) {
         this.nodeID = sourceID;
     }
 
-    public void addDestination(DijkstraNode destination, double distance) {
-        adjacentNodes.put(destination, distance);
+    public void addDestination(NeighborNode neighborNode) {
+        neighborNodes.add(neighborNode);
     }
 
     public Long getNodeID() {
@@ -28,12 +29,12 @@ public class DijkstraNode {
         this.nodeID = name;
     }
 
-    public Map<DijkstraNode, Double> getAdjacentNodes() {
-        return adjacentNodes;
+    public List<NeighborNode> getNeighborNodes() {
+        return neighborNodes;
     }
 
-    public void setAdjacentNodes(Map<DijkstraNode, Double> adjacentNodes) {
-        this.adjacentNodes = adjacentNodes;
+    public void setNeighborNodes(List<NeighborNode> neighborNodes) {
+        this.neighborNodes = neighborNodes;
     }
 
     public Double getDistance() {

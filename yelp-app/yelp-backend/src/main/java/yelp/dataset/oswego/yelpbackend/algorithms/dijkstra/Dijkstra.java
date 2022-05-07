@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import lombok.Data;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
 @Data
@@ -22,12 +23,12 @@ public class Dijkstra {
         while (unsettledNodes.size() != 0) {
             DijkstraNode currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
-            for (Entry < DijkstraNode, Double> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
-                DijkstraNode adjacentNode = adjacencyPair.getKey();
-                Double edgeWeight = adjacencyPair.getValue();
-                if (!settledNodes.contains(adjacentNode)) {
-                    calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
-                    unsettledNodes.add(adjacentNode);
+            for (NeighborNode neighbor : currentNode.getNeighborNodes()){
+                DijkstraNode neighborNode = neighbor.getNode();
+                Double distanceWeight = neighbor.getDistanceWeight();
+                if (!settledNodes.contains(neighborNode)) {
+                    calculateMinimumDistance(neighborNode, distanceWeight, currentNode);
+                    unsettledNodes.add(neighborNode);
                 }
             }
             settledNodes.add(currentNode);
