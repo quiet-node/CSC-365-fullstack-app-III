@@ -12,22 +12,18 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.Short
 public class Dijkstra {
 
     /**
-     * Main method to calculate shortest path
+     * Main method to calculate shortest path based on a root node
      * @param graph
      * @param source
      * @return DijkstraGraph
      */
     public DijkstraGraph calculateShortestPathFromSource(DijkstraGraph graph, DijkstraNode source) {
-        source.setDistance(0.0);
+        source.setWeight(0.0);
     
         List<DijkstraNode> visitedNodes = new ArrayList<>();
         List<DijkstraNode> unvisitedNodes = new ArrayList<>();
     
         unvisitedNodes.add(source);
-
-        // x = 0.23570226039551587 => 1 - x = 0.7642977396
-
-        // y = 0.10123880660581401 => 1 - y = 0.89876119339
     
         while (unvisitedNodes.size() != 0) {
             DijkstraNode currentNode = getLowestDistanceNode(unvisitedNodes);
@@ -35,6 +31,11 @@ public class Dijkstra {
 
             for (NeighborNode neighbor : currentNode.getNeighborNodes()){
                 DijkstraNode neighborNode = neighbor.getNode();
+
+                // Using inverse cosine similarity to get the weight
+                // Let's say there are x and y like bellow
+                // x = 0.23570226039551587 (more similar) => 1 - x = 0.7642977396 <lighter weight>
+                // y = 0.10123880660581401 (less similar) => 1 - y = 0.89876119339 <heavier weight>
                 Double similarityWeight = 1 - neighbor.getSimilarityWeight();
                 
                 if (!visitedNodes.contains(neighborNode)) {
@@ -56,7 +57,7 @@ public class Dijkstra {
         DijkstraNode lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
         for (DijkstraNode node: unsettledNodes) {
-            double nodeDistance = node.getDistance();
+            double nodeDistance = node.getWeight();
             if (nodeDistance < lowestDistance) {
                 lowestDistance = nodeDistance;
                 lowestDistanceNode = node;
@@ -72,9 +73,9 @@ public class Dijkstra {
      * @param sourceNode
      */
     private static void calculateMinimumDistance(DijkstraNode evaluationNode, Double edgeWeight, DijkstraNode sourceNode) {
-        Double sourceDistance = sourceNode.getDistance();
-        if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
-            evaluationNode.setDistance(sourceDistance + edgeWeight);
+        Double sourceDistance = sourceNode.getWeight();
+        if (sourceDistance + edgeWeight < evaluationNode.getWeight()) {
+            evaluationNode.setWeight(sourceDistance + edgeWeight);
             LinkedList<ShortestPath> shortestPaths = new LinkedList<>(sourceNode.getShortestPath());
             ShortestPath shortestPath = new ShortestPath(sourceNode.getNodeID(), sourceDistance + edgeWeight);
             shortestPaths.add(shortestPath);

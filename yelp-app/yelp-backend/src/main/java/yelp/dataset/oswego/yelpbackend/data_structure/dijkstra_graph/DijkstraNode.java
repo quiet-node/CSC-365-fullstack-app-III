@@ -9,7 +9,7 @@ public class DijkstraNode {
 
     private Long nodeID;
     private List<ShortestPath> shortestPath = new ArrayList<>();
-    private Double distance = Double.MAX_VALUE;
+    private Double weight = Double.MAX_VALUE;
     List<NeighborNode> neighborNodes = new ArrayList<>();
         
     public DijkstraNode (){};
@@ -37,12 +37,12 @@ public class DijkstraNode {
         this.neighborNodes = neighborNodes;
     }
 
-    public Double getDistance() {
-        return distance;
+    public Double getWeight() {
+        return weight;
     }
 
-    public void setDistance(Double distance) {
-        this.distance = distance;
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public List<ShortestPath> getShortestPath() {
@@ -55,7 +55,7 @@ public class DijkstraNode {
 
     @Override
     public String toString() {
-        return "Node: "+nodeID+", distance: " + distance +", shortest path: " +shortestPath;
+        return "Node: "+nodeID+", weight: " + weight +", shortest path: " +shortestPath;
     }
 
 }
