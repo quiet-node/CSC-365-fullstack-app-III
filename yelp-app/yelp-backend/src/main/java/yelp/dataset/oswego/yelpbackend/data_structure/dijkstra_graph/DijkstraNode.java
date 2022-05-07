@@ -4,19 +4,19 @@ import java.util.*;
 
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
-public class Node {
+public class DijkstraNode {
 
     private Long nodeID;
     private List<ShortestPath> shortestPath = new ArrayList<>();
     private Double distance = Double.MAX_VALUE;
-    Map<Node, Double> adjacentNodes = new HashMap<>();
+    Map<DijkstraNode, Double> adjacentNodes = new HashMap<>();
         
-    public Node (){};
-    public Node(long sourceID) {
+    public DijkstraNode (){};
+    public DijkstraNode(long sourceID) {
         this.nodeID = sourceID;
     }
 
-    public void addDestination(Node destination, double distance) {
+    public void addDestination(DijkstraNode destination, double distance) {
         adjacentNodes.put(destination, distance);
     }
 
@@ -28,11 +28,11 @@ public class Node {
         this.nodeID = name;
     }
 
-    public Map<Node, Double> getAdjacentNodes() {
+    public Map<DijkstraNode, Double> getAdjacentNodes() {
         return adjacentNodes;
     }
 
-    public void setAdjacentNodes(Map<Node, Double> adjacentNodes) {
+    public void setAdjacentNodes(Map<DijkstraNode, Double> adjacentNodes) {
         this.adjacentNodes = adjacentNodes;
     }
 

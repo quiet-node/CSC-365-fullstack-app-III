@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Graph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
@@ -22,7 +22,6 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.GraphService;
-import yelp.dataset.oswego.yelpbackend.services.IOService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 
 @RestController
@@ -100,7 +99,7 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
     @GetMapping("/graph/fetch/graph/{businessID}")
-    public ResponseEntity<Graph> getGraph(@PathVariable int businessID) throws IOException{
+    public ResponseEntity<DijkstraGraph> getGraph(@PathVariable int businessID) throws IOException{
         return new ResponseEntity<>(new RestService().fetchGraph(businessID), HttpStatus.OK);
     }
 

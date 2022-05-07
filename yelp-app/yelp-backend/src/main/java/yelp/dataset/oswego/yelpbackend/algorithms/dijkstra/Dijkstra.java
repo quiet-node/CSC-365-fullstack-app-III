@@ -4,26 +4,26 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import lombok.Data;
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Graph;
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Node;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 
 @Data
 public class Dijkstra {
 
-    public Graph calculateShortestPathFromSource(Graph graph, Node source) {
+    public DijkstraGraph calculateShortestPathFromSource(DijkstraGraph graph, DijkstraNode source) {
         source.setDistance(0.0);
     
-        List<Node> settledNodes = new ArrayList<>();
-        List<Node> unsettledNodes = new ArrayList<>();
+        List<DijkstraNode> settledNodes = new ArrayList<>();
+        List<DijkstraNode> unsettledNodes = new ArrayList<>();
     
         unsettledNodes.add(source);
     
         while (unsettledNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unsettledNodes);
+            DijkstraNode currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
-            for (Entry < Node, Double> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
-                Node adjacentNode = adjacencyPair.getKey();
+            for (Entry < DijkstraNode, Double> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
+                DijkstraNode adjacentNode = adjacencyPair.getKey();
                 Double edgeWeight = adjacencyPair.getValue();
                 if (!settledNodes.contains(adjacentNode)) {
                     calculateMinimumDistance(adjacentNode, edgeWeight, currentNode);
@@ -35,10 +35,10 @@ public class Dijkstra {
         return graph;
     }
 
-    private static Node getLowestDistanceNode(List<Node> unsettledNodes) {
-        Node lowestDistanceNode = null;
+    private static DijkstraNode getLowestDistanceNode(List<DijkstraNode> unsettledNodes) {
+        DijkstraNode lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
-        for (Node node: unsettledNodes) {
+        for (DijkstraNode node: unsettledNodes) {
             double nodeDistance = node.getDistance();
             if (nodeDistance < lowestDistance) {
                 lowestDistance = nodeDistance;
@@ -48,7 +48,7 @@ public class Dijkstra {
         return lowestDistanceNode;
     }
 
-    private static void calculateMinimumDistance(Node evaluationNode, Double edgeWeight, Node sourceNode) {
+    private static void calculateMinimumDistance(DijkstraNode evaluationNode, Double edgeWeight, DijkstraNode sourceNode) {
         Double sourceDistance = sourceNode.getDistance();
         if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
             evaluationNode.setDistance(sourceDistance + edgeWeight);

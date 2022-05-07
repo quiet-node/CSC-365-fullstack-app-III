@@ -7,8 +7,8 @@ import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Graph;
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.Node;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
@@ -125,26 +125,26 @@ public class GraphService {
      * @return
      * @throws IOException
      */
-    public Graph setUpDijkstraGraph(int nodeID) throws IOException {
+    public DijkstraGraph setUpDijkstraGraph(int nodeID) throws IOException {
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents();
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
 
         ConnectedComponenet connectedComponent = new GraphService().getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
 
-        List<Node> graphNodes = new ArrayList<>();
+        List<DijkstraNode> graphNodes = new ArrayList<>();
 
         for (int connectedNodeID : connectedComponent.getChildren()) {
-            graphNodes.add(new Node(connectedNodeID));
+            graphNodes.add(new DijkstraNode(connectedNodeID));
         }
 
-        Graph graph = new Graph();
+        DijkstraGraph graph = new DijkstraGraph();
 
-        for (Node node : graphNodes) {
+        for (DijkstraNode node : graphNodes) {
             WeightedNode weightedNode = new IOService().readNodesWithEdges(node.getNodeID());
             for (WeightedEdge edge : weightedNode.getEdges()) {
-                Node neighbor = new Node();
-                for (Node graphNode : graphNodes) {
+                DijkstraNode neighbor = new DijkstraNode();
+                for (DijkstraNode graphNode : graphNodes) {
                     if (graphNode.getNodeID() == edge.getDestinationID()) 
                         neighbor = graphNode;
                 }
@@ -153,9 +153,9 @@ public class GraphService {
             }
         }
 
-        for (Node node : graphNodes) graph.addNode(node);
+        for (DijkstraNode node : graphNodes) graph.addNode(node);
 
-        Node source = graph.getNodeByNodeID(nodeID);
+        DijkstraNode source = graph.getNodeByNodeID(nodeID);
 
         graph = new Dijkstra().calculateShortestPathFromSource(graph, source);
         graph.getNodes().forEach(node -> {
