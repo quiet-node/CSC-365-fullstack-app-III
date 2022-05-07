@@ -3,6 +3,7 @@ package yelp.dataset.oswego.yelpbackend.services;
 import java.util.*;
 import java.io.IOException;
 
+import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Graph;
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Node;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
@@ -131,7 +132,6 @@ public class GraphService {
         Graph graph = new Graph();
 
         ConnectedComponenet connectedComponent = getConnectedComponent(connectedComponenets, disjointUnionSets.findDisjointSet(nodeID));
-        System.out.println(connectedComponent);
 
         for (int connectedNodeID : connectedComponent.getChildren()) {
             WeightedNode weightedNode = new IOService().readNodesWithEdges(connectedNodeID);
@@ -141,6 +141,10 @@ public class GraphService {
             });
             graph.addNode(node);
         }
+
+        Node rootNode = graph.getNodeByNodeID(nodeID);
+
+        graph = new Dijkstra().calculateShortestPathFromSource(graph, new Node(nodeID));
         
         return graph;
     }

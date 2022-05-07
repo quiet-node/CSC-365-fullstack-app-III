@@ -8,16 +8,15 @@ public class Dijkstra {
     public Graph calculateShortestPathFromSource(Graph graph, Node source) {
         source.setDistance(0.0);
     
-        Set<Node> settledNodes = new HashSet<>();
-        Set<Node> unsettledNodes = new HashSet<>();
+        List<Node> settledNodes = new ArrayList<>();
+        List<Node> unsettledNodes = new ArrayList<>();
     
         unsettledNodes.add(source);
     
         while (unsettledNodes.size() != 0) {
             Node currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
-            for (Entry < Node, Double> adjacencyPair: 
-              currentNode.getAdjacentNodes().entrySet()) {
+            for (Entry < Node, Double> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
                 Node adjacentNode = adjacencyPair.getKey();
                 Double edgeWeight = adjacencyPair.getValue();
                 if (!settledNodes.contains(adjacentNode)) {
@@ -30,7 +29,7 @@ public class Dijkstra {
         return graph;
     }
 
-    private Node getLowestDistanceNode(Set <Node> unsettledNodes) {
+    private Node getLowestDistanceNode(List<Node> unsettledNodes) {
         Node lowestDistanceNode = null;
         double lowestDistance = Double.MAX_VALUE;
         for (Node node: unsettledNodes) {

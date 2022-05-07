@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class Node {
     private Long nodeID;
-    private List<Node> shortestPath = new LinkedList<>();
+    private List<Node> shortestPath = new ArrayList<>();
     private Double distance = Double.MAX_VALUE;
     Map<Node, Double> adjacentNodes = new HashMap<>();
      
