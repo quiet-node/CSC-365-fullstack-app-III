@@ -10,6 +10,7 @@ import yelp.dataset.oswego.yelpbackend.algorithms.clustering.KMeans;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
+import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
@@ -80,10 +81,12 @@ public class RestService {
         return new IOService().readNearestNodesList();
     }
     public List<ConnectedComponenet> fetchConnectedComponents() throws IOException {
-        return new GraphService().fetchConnectedComponents();
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
+        return new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
     }
     public DijkstraGraph fetchGraphByGraphID(int nodeID) throws IOException {
-        DijkstraGraph graph = new GraphService().setUpDijkstraGraph(nodeID);
+        new GraphService().setUpDijkstraGraph(nodeID);
         return null;
     }
 

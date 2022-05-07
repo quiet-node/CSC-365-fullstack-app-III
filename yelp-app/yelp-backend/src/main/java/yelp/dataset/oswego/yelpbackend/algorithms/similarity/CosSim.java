@@ -155,7 +155,6 @@ public class CosSim {
     }
 
 
-    // calculate simRate 
     /**
      * Main function to calculate the similarity rate between 2 categories using Cosine Similarity metric
      * @param categoriesA
@@ -175,8 +174,5 @@ public class CosSim {
 
         return this.cosSimRate;
     }
-
-  
-
 
 }
