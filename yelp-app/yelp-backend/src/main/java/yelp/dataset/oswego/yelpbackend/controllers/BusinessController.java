@@ -107,13 +107,20 @@ public class BusinessController {
     public ResponseEntity<List<ConnectedComponenet>> connectivityCheck() throws IOException{
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
-    @GetMapping("/graph/fetch/graph/shortest-path/{sourceNodeID}/{destinationNodeID}")
-    public ResponseEntity<ShortestPath> fetchShortestPath(@PathVariable int sourceNodeID, @PathVariable int destinationNodeID) throws IOException{
-        return new ResponseEntity<>(new RestService().fetchShortestPath(sourceNodeID, destinationNodeID), HttpStatus.OK);
-    }
-    @GetMapping("/graph/fetch/graph/{businessID}")
+
+    @GetMapping("/graph/fetch/{businessID}")
     public ResponseEntity<DijkstraGraph> fetchGraphByNodeID(@PathVariable int businessID) throws IOException{
         return new ResponseEntity<>(new RestService().fetchGraphByGraphID(businessID), HttpStatus.OK);
     }
 
+    @GetMapping("/graph/fetch/shortest-path/{sourceNodeID}/{destinationNodeID}")
+    public ResponseEntity<ShortestPath> fetchShortestPath(@PathVariable int sourceNodeID, @PathVariable int destinationNodeID) throws IOException{
+        return new ResponseEntity<>(new RestService().fetchShortestPath(sourceNodeID, destinationNodeID), HttpStatus.OK);
+    }
+
+    @PostMapping("/graph/dijkstra/write-to-disk")
+    public ResponseEntity<String> writeDijkstraGraph() throws IOException{
+        new GraphService().writeDijkstraGraph();
+        return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
+    }
 }

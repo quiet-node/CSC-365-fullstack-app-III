@@ -68,8 +68,6 @@ public class GraphService {
         // new IOService().writeNearestNodesList(nearestNodesList);
     }
 
-
-
     /**
      * Find four geographically nearest businesses based on business name
      * @param requestedBusinessModel
@@ -94,13 +92,35 @@ public class GraphService {
         return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
     }
 
+    /**
+     * A function to write each dijkstra graph to disk
+     * @throws IOException
+     */
+    public void writeDijkstraGraph() throws IOException {
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
+
+        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
+        for (ConnectedComponenet connectedComponenet : connectedComponenets) {
+            DijkstraGraph dijkstraGraph = setUpDijkstraGraph(connectedComponenet.getRootID());
+
+            // write each dijkstra to disk -- this takes ... to finish
+            new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
+        }
+    }
+
+    /**
+     * Main method to get the shortest path of the two chosen nodes
+     * @param sourceNodeID
+     * @param destinationNodeID
+     * @return
+     * @throws IOException
+     */
     public ShortestPath getShortestPath(int sourceNodeID, int destinationNodeID) throws IOException {
         DijkstraGraph dijkstraGraph = setUpDijkstraGraph(sourceNodeID);
-        for (DijkstraNode node : dijkstraGraph.getNodes()) {
-            if (node.getNodeID() == destinationNodeID) {
+        for (DijkstraNode node : dijkstraGraph.getNodes())
+            if (node.getNodeID() == destinationNodeID)
                 return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
-            }
-        }
         return null;
     }
 
@@ -151,10 +171,6 @@ public class GraphService {
 
         // apply Dijkstra to the graph
         graph = new Dijkstra().calculateShortestPathFromSource(graph, graph.getNodeByNodeID(nodeID));
-        graph.getNodes().forEach(node -> {
-            System.out.println();
-            System.out.println(node);
-        });
         return graph;
     }
 
