@@ -1,1 +1,1 @@
-### This folder contains btree.bin
+### This folder contains yelp dataset business.json
