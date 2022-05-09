@@ -2,6 +2,8 @@ package yelp.dataset.oswego.yelpbackend.services;
 
 import java.util.*;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
 
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
@@ -101,12 +103,31 @@ public class GraphService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
 
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
+        int count = 0;
+        long totalTime = 0;
+        int totalNodes = 0;
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
+            count +=1;
+            Instant before = Instant.now();
+            
             DijkstraGraph dijkstraGraph = setUpDijkstraGraph(connectedComponenet.getRootID());
+            int nodesSize = dijkstraGraph.getNodes().size();
+            totalNodes += nodesSize;
+            
+            Instant after = Instant.now();
+            long differenceInMillis = Duration.between(before, after).toMillis();
+            long differenceInSeconds = Duration.between(before, after).toSeconds();
+            long differenceInMinutes = Duration.between(before, after).toMinutes();
+            long differenceInHours = Duration.between(before, after).toHours();
+            totalTime += differenceInMillis;
 
+            System.out.println(count+ ". Disjoint set: " +connectedComponenet.getRootID()+ ". Total nodes: " +nodesSize+ " ---- " +differenceInMillis+ " millis ---- " +differenceInSeconds+ " seconds ---- " +differenceInMinutes+ " minutes ---- " +differenceInHours+ " hours.");
+            System.out.println();
+            
             // write each dijkstra to disk -- this takes ... to finish
             new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
         }
+        System.out.println("Total: " +count+ "disjoint sets, " +totalNodes+ " nodes --- took " +totalTime / 3600000+ "hours to finish");
     }
 
     /**
@@ -117,7 +138,7 @@ public class GraphService {
      * @throws IOException
      */
     public ShortestPath getShortestPath(int sourceNodeID, int destinationNodeID) throws IOException {
-        DijkstraGraph dijkstraGraph = setUpDijkstraGraph(sourceNodeID);
+        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
         for (DijkstraNode node : dijkstraGraph.getNodes())
             if (node.getNodeID() == destinationNodeID)
                 return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
@@ -169,6 +190,8 @@ public class GraphService {
         // Since each node needs to finish their full circle of adding-neighbors-process, it needs its own loop
         for (DijkstraNode node : graphNodes) graph.addNode(node);
 
+        // System.out.println(graph.getNodes().size());
+
         // apply Dijkstra to the graph
         graph = new Dijkstra().calculateShortestPathFromSource(graph, graph.getNodeByNodeID(nodeID));
         return graph;
@@ -205,7 +228,6 @@ public class GraphService {
         }
         // Check if all the neighbors are connected in one set -- not neccessary but make sure uninon-find works correctly
         //System.out.println(checkConnectivity(disjointUnionSets, connectedComponenets));
-
         return connectedComponenets;
     }
 
