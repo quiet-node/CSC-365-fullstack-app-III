@@ -1,5 +1,7 @@
 package yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
@@ -15,7 +17,7 @@ import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNod
 
 @Data
 @AllArgsConstructor
-public class NeighborNode {
+public class NeighborNode implements Serializable {
     private DijkstraNode node;
     private double distanceWeight;
     private double similarityWeight;

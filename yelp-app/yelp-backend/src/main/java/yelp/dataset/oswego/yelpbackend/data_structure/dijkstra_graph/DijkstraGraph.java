@@ -1,5 +1,6 @@
 package yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph;
 
+import java.io.Serializable;
 import java.util.*;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
  */
 
 @Data
-public class DijkstraGraph {
+public class DijkstraGraph implements Serializable {
     private List<DijkstraNode> nodes = new ArrayList<>();
 
     public void addNode(DijkstraNode node) {nodes.add(node);};

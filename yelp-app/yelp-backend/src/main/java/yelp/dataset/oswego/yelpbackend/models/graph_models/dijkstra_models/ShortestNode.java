@@ -1,5 +1,7 @@
 package yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,7 +15,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ShortestNode {
+public class ShortestNode implements Serializable {
     private Long nodeID;
     private double weight;
 }

@@ -1,5 +1,6 @@
 package yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph;
 
+import java.io.Serializable;
 import java.util.*;
 
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
@@ -13,7 +14,7 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.Short
  * @link: https://github.com/lgad31vn/CSC-365
  */
 
-public class DijkstraNode {
+public class DijkstraNode implements Serializable {
 
     private Long nodeID;
     private List<ShortestNode> shortestPath = new ArrayList<>();
