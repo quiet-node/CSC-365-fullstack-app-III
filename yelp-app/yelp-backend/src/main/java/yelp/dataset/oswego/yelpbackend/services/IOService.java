@@ -18,6 +18,7 @@ import java.util.List;
 
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
 
@@ -34,6 +35,7 @@ public class IOService {
     private final String bTreeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
     private final String neareastNodeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin";
     private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nodes";
+    private final String dijkstrasFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-dijkstras";
 
     /**
      * A function to write a whole Btree to disk
@@ -165,4 +167,14 @@ public class IOService {
         writer.flush();
     }
 
+    /**
+     * A function to write a Dijkstra Graphs to disk
+     * @param nearestNodeList
+     * @throws IOException
+     */
+    protected void writeDijkstraGraph(DijkstraGraph dijkstraGraph, int rootID) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(dijkstrasFilePath+"/dijkstra-"+rootID+".bin"));
+        oos.writeObject(dijkstraGraph);
+        oos.close();
+    }
 }
