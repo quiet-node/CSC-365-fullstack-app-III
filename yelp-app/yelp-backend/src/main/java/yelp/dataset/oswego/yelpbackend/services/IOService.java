@@ -177,4 +177,23 @@ public class IOService {
         oos.writeObject(dijkstraGraph);
         oos.close();
     }
+
+    /**
+     * A function to read a Dijkstra Graphs from disk
+     * @param nearestNodeList
+     * @throws IOException
+     */
+    protected DijkstraGraph readDijkstraGraph(int rootID) throws IOException {
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(dijkstrasFilePath+"/dijkstra-"+rootID+".bin"));
+        try {
+            DijkstraGraph dijkstraGraph = (DijkstraGraph) ois.readObject();
+            ois.close();
+            return dijkstraGraph;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            ois.close();
+            return null;
+        }
+    }
+
 }
