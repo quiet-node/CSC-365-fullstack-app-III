@@ -4,30 +4,29 @@ import Header from '../components/Header';
 import { Graph } from 'react-d3-graph';
 
 const WeightedGraph = () => {
-  // graph payload (with minimalist structure)
-  const data = {
+  const data: any = {
     nodes: [
-      { id: '1' },
-      { id: '2' },
-      { id: '3' },
-      { id: '4' },
-      { id: '5' },
-      { id: '6' },
-      { id: '7' },
-      { id: '8' },
+      { id: 1 },
+      { id: 2 },
+      { id: 3 },
+      { id: 4 },
+      { id: 5 },
+      { id: 6 },
+      { id: 7 },
+      { id: 8 },
     ],
     links: [
-      { source: '1', target: '2' },
-      { source: '2', target: '3' },
-      { source: '3', target: '4' },
-      { source: '4', target: '5' },
-      { source: '5', target: '6' },
-      { source: '6', target: '7' },
-      { source: '7', target: '8' },
+      { source: 1, target: 2 },
+      { source: 2, target: 3 },
+      { source: 3, target: 4 },
+      { source: 4, target: 5 },
+      { source: 5, target: 6 },
+      { source: 6, target: 7 },
+      { source: 7, target: 8 },
     ],
   };
 
-  const graphConfig = {
+  const graphConfig: any = {
     nodeHighlightBehavior: true,
     height: 800,
     width: 1000,
@@ -45,6 +44,7 @@ const WeightedGraph = () => {
       highlightFontSize: 12,
       fontWeight: 'bold',
       highlightFontWeight: 'bold',
+      labelPosition: 'bottom',
     },
     link: {
       highlightColor: 'lightblue',
