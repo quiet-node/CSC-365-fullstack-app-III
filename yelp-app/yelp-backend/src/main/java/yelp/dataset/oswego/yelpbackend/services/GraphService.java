@@ -106,8 +106,9 @@ public class GraphService {
         int count = 0;
         long totalTime = 0;
         int totalNodes = 0;
+
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
-            if (connectedComponenet.getChildren().size() < 200) {
+            if (connectedComponenet.getChildren().size() < 50) {
                 count +=1;
                 Instant before = Instant.now();
                 
@@ -129,7 +130,7 @@ public class GraphService {
                 new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
             }
         }
-        System.out.println("Total: " +count+ "disjoint sets, " +totalNodes+ " nodes --- took " +totalTime / 3600000+ "hours to finish");
+        System.out.println("Total: " +count+ "disjoint sets, " +totalNodes+ " nodes --- took " +totalTime / 3600000+ " hours to finish");
     }
 
     /**
