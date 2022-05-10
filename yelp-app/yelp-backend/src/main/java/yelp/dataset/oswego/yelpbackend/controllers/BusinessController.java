@@ -20,6 +20,7 @@ import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3GraphModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
 import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
@@ -119,8 +120,7 @@ public class BusinessController {
     }
 
     @GetMapping("/graph/fetch/rd3g")
-    public ResponseEntity<String> fetchRd3gData() throws IOException{
-        new RestService().fetchRd3gData();
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<D3GraphModel> fetchRd3gData() throws IOException{
+        return new ResponseEntity<>(new RestService().fetchRd3gData(), HttpStatus.OK);
     }
 }
