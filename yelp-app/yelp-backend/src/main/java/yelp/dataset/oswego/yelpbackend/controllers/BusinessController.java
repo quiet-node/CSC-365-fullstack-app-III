@@ -81,7 +81,7 @@ public class BusinessController {
 
     @PostMapping("/graph/closest/four/edges/all/write-to-disk")
     public ResponseEntity<String> writeClosestFourByBusinessName() throws IOException{
-        new GraphService().writeClosestFourToDataStore(10000);
+        new RestService().writeClosestFourToDataStore(10000);
         return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
     }
 
@@ -89,7 +89,7 @@ public class BusinessController {
     public ResponseEntity<NearestBusinessModel> getClosestFourByBusinessName(@PathVariable String requestedBusiness) throws IOException{
         List<BusinessModel> businesses = repo.findByName(requestedBusiness);
         if (businesses.size() == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Business Not Found");
-        return new ResponseEntity<>(new RestService().getClosestFourByBusinessName(businesses.get(0)), HttpStatus.OK);
+        return new ResponseEntity<>(new RestService().fetchClosestFourByBusinessName(businesses.get(0)), HttpStatus.OK);
     }
 
     @GetMapping("/graph/closest/four/ID/{businessID}")
@@ -114,7 +114,7 @@ public class BusinessController {
 
     @PostMapping("/graph/dijkstra/write-to-disk")
     public ResponseEntity<String> writeDijkstraGraph() throws IOException{
-        new GraphService().writeDijkstraGraph();
+        new RestService().writeDijkstraGraph();
         return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
     }
 

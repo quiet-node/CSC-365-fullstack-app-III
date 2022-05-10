@@ -3,20 +3,13 @@ package yelp.dataset.oswego.yelpbackend.services;
 import java.util.*;
 import java.io.IOException;
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
-import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
-import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
-import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.disjoint_union_set.DisjointUnionSets;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdge;
-import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
-import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModelComparator;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.ConnectedComponenet;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.NeighborNode;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
-import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 
 
 /**
@@ -126,8 +119,6 @@ public class GraphService {
         // Since each node needs to finish their full circle of adding-neighbors-process, it needs its own loop
         for (DijkstraNode node : graphNodes) graph.addNode(node);
 
-        // System.out.println(graph.getNodes().size());
-
         // apply Dijkstra to the graph
         graph = new Dijkstra().calculateShortestPathFromSource(graph, graph.getNodeByNodeID(nodeID));
         return graph;
@@ -172,104 +163,5 @@ public class GraphService {
                 return componenet;
         return null;
     }
-
-
-    /**
-     * Find four geographically nearest businesses for each business and write it to disk
-     * @param numberOfNodes
-     * @return List<NearestBusinessModel>
-     * @throws IOException
-     */
-    public void writeClosestFourToDataStore(int numberOfNodes) throws IOException {
-        BusinessBtree businessBtree = new IOService().readBtree();
-        List<WeightedNode> nearestNodesList = new ArrayList<>();
-        
-        for (int i = 0; i < numberOfNodes; i++) {
-            List<BusinessModel> closestFourBusinessNodelList = new ArrayList<>();
-            List<WeightedEdge> edges = new ArrayList<>();
-            BusinessModel targetBusiness = businessBtree.findKeyByBusinessID(i);
-            for (int j = 0; j < numberOfNodes; j++) {
-                BusinessModel comparedBusiness = businessBtree.findKeyByBusinessID(j);
-                if (targetBusiness.getId() != comparedBusiness.getId()){
-                    double distanceWeight = new Haversine().calculateHaversine(targetBusiness, comparedBusiness);
-                    comparedBusiness.setDistance(distanceWeight);
-                    closestFourBusinessNodelList.add(comparedBusiness);
-                }
-            }
-            Collections.sort(closestFourBusinessNodelList, new BusinessModelComparator());
-            closestFourBusinessNodelList = closestFourBusinessNodelList.subList(0, 4);
-            for (BusinessModel businessModel : closestFourBusinessNodelList) {
-                double simRateWeight = new CosSim().calcSimRate(targetBusiness.getCategories(), businessModel.getCategories());
-                WeightedEdge weightedEdge = new WeightedEdge(targetBusiness.getId(), businessModel.getId(), businessModel.getDistance(), simRateWeight);
-                edges.add(weightedEdge);
-            }
-            nearestNodesList.add(new WeightedNode(targetBusiness.getId(), edges));
-            
-            // write each node to disk -- this takes 4 minutes to finish
-            // new IOService().writeNodesWithEdges(nearestNodesList.get(i)); 
-        }
-        // write whole list to disk -- 23.58 seconds
-        // new IOService().writeNearestNodesList(nearestNodesList);
-    }
-
-    /**
-     * Find four geographically nearest businesses based on business name
-     * @param requestedBusinessModel
-     * @return List<BusinessModel>
-     * @throws IOException
-     */
-    public NearestBusinessModel fetchClosestFourByBusinessName(BusinessModel requestedBusinessModel) throws IOException {
-        BusinessBtree businessBtree = new IOService().readBtree();
-        WeightedNode nearestNodeModel = new IOService().readNodesWithEdges(requestedBusinessModel.getId());
-        List<BusinessModel> businessModelEdges = new ArrayList<>();
-
-        nearestNodeModel.getEdges().forEach(edge -> {
-            BusinessModel destinationBusinessModel = businessBtree.findKeyByBusinessID((int) edge.getDestinationID());
-            destinationBusinessModel.setDistance(edge.getDistanceWeight());
-            
-            double similarityRate = new CosSim().calcSimRate(requestedBusinessModel.getCategories(), destinationBusinessModel.getCategories());
-            destinationBusinessModel.setSimilarityRate(similarityRate);
-            
-            businessModelEdges.add(destinationBusinessModel);
-        });
-
-        return new NearestBusinessModel(requestedBusinessModel, businessModelEdges);
-    }
-
-    /**
-     * A function to write each dijkstra graph to disk
-     * @throws IOException
-     */
-    public void writeDijkstraGraph() throws IOException {
-        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
-        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
-
-        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
-
-        for (ConnectedComponenet connectedComponenet : connectedComponenets) {
-            if (connectedComponenet.getChildren().size() < 50) {
-                DijkstraGraph dijkstraGraph = setUpDijkstraGraph(connectedComponenet.getRootID());
-
-                // write each dijkstra to disk 
-                new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
-            }
-        }
-    }
-
-    /**
-     * Main method to get the shortest path of the two chosen nodes
-     * @param sourceNodeID
-     * @param destinationNodeID
-     * @return
-     * @throws IOException
-     */
-    public ShortestPath getShortestPath(int sourceNodeID, int destinationNodeID) throws IOException {
-        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
-        for (DijkstraNode node : dijkstraGraph.getNodes())
-            if (node.getNodeID() == destinationNodeID)
-                return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
-        return null;
-    }
-    
 
 }
