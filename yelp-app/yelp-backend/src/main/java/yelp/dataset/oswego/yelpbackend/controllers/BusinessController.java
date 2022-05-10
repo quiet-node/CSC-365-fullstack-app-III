@@ -22,7 +22,6 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.Short
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3GraphModel;
 import yelp.dataset.oswego.yelpbackend.repositories.BusinessRepository;
-import yelp.dataset.oswego.yelpbackend.services.GraphService;
 import yelp.dataset.oswego.yelpbackend.services.RestService;
 
 /**

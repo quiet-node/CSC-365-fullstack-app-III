@@ -22,6 +22,8 @@ import yelp.dataset.oswego.yelpbackend.models.graph_models.connected_components.
 import yelp.dataset.oswego.yelpbackend.models.graph_models.dijkstra_models.ShortestPath;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.node_models.NearestBusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3GraphModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3LinkModel;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3NodeModel;
 
 /**
  * @author: Nam (Logan) Nguyen
@@ -162,7 +164,7 @@ public class RestService {
 
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
             if (connectedComponenet.getChildren().size() < 50) {
-                DijkstraGraph dijkstraGraph = new GraphService().setUpDijkstraGraph(connectedComponenet.getRootID());
+                DijkstraGraph dijkstraGraph = new GraphService().getDijkstraGraph(connectedComponenet.getRootID());
 
                 // write each dijkstra to disk 
                 new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
@@ -200,11 +202,36 @@ public class RestService {
         return null;
     }
 
-
+    /**
+     * Prepares Data for React D3 Graph (RD3G)
+     * @return
+     * @throws IOException
+     */
     public D3GraphModel fetchRd3gData() throws IOException {
+        List<Integer> rootIDs = new IOService().fetchDijkstraRootIDs();
+        Integer randomRootID = rootIDs.get(new Random().nextInt(rootIDs.size()));
 
+        List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
+        DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
+        List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
 
-        return null;
+        List<D3NodeModel> d3Nodes = new ArrayList<>();
+        ConnectedComponenet connectedComponenet = new GraphService().getConnectedComponent(connectedComponenets, randomRootID);
+        for(Integer child : connectedComponenet.getChildren()) 
+        d3Nodes.add(new D3NodeModel(child));
+
+        List<D3LinkModel> D3links = new ArrayList<>();
+        DijkstraGraph graph = new GraphService().initGraph(randomRootID);
+        graph.getNodes().forEach(node -> {
+            Long d3SourceID = node.getNodeID();
+            node.getNeighborNodes().forEach(neighbor -> {
+                    Long d3TargetID = neighbor.getNode().getNodeID();
+                    D3links.add(new D3LinkModel(d3SourceID, d3TargetID));
+                }
+            );
+        });
+
+        return new D3GraphModel(d3Nodes, D3links);
     }
 
     
