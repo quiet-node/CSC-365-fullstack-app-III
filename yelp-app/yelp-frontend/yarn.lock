@@ -1766,6 +1766,11 @@ quick-lru@^5.1.1:
   resolved "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
+react-d3-graph@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-d3-graph/-/react-d3-graph-2.6.0.tgz#b994131e430b568e086970560ba8a26809113173"
+  integrity sha512-U72didZuPuYEqAi1n2bJvnph+9MviIw2x9I0eoxb1IKk3cyEwsJV96n3RL72z/7HDsa1FOvDKuOJE7ujSNZB/Q==
+
 react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-17.0.2.tgz"
