@@ -2,9 +2,6 @@ package yelp.dataset.oswego.yelpbackend.services;
 
 import java.util.*;
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-
 import yelp.dataset.oswego.yelpbackend.algorithms.dijkstra.Dijkstra;
 import yelp.dataset.oswego.yelpbackend.algorithms.haversine.Haversine;
 import yelp.dataset.oswego.yelpbackend.algorithms.similarity.CosSim;
@@ -107,7 +104,7 @@ public class GraphService {
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
             if (connectedComponenet.getChildren().size() < 50) {
                 DijkstraGraph dijkstraGraph = setUpDijkstraGraph(connectedComponenet.getRootID());
-                
+
                 // write each dijkstra to disk 
                 new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
             }
@@ -128,6 +125,7 @@ public class GraphService {
                 return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
         return null;
     }
+
 
     /**
      * Function to set up graph to run dijkstra

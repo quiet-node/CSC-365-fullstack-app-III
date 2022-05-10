@@ -109,8 +109,9 @@ public class BusinessController {
     }
 
     @GetMapping("/graph/fetch/{businessID}")
-    public ResponseEntity<DijkstraGraph> fetchGraphByNodeID(@PathVariable int businessID) throws IOException{
-        return new ResponseEntity<>(new RestService().fetchGraphByGraphID(businessID), HttpStatus.OK);
+    public ResponseEntity<String> fetchGraphByNodeID(@PathVariable int businessID) throws IOException{
+        new RestService().fetchGraphByGraphID(businessID);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/graph/fetch/shortest-path/{sourceNodeID}/{destinationNodeID}")
@@ -123,4 +124,5 @@ public class BusinessController {
         new GraphService().writeDijkstraGraph();
         return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
     }
+
 }
