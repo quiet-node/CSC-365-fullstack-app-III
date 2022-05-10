@@ -5,6 +5,8 @@ import java.util.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
+
 /**
  * @author: Nam (Logan) Nguyen
  * @college: SUNY Oswego
@@ -24,10 +26,10 @@ public class RunnerService implements CommandLineRunner{
          */
 
         // /** READING/WRITING BTREE TO DISK */
-        // new IOService().writeBtree(new JsonService().initBusinessBtree("/Users/logan/coding/SUNY_Oswego/CSC-365/In_Class/Assignment3/yelp-app/yelp-dataset/business.json"));
+        // BusinessBtree businessBtree = new JsonService().initBusinessBtree("{SOURCE-PATH}/yelp-app/yelp-dataset/business.json");
+        // new IOService().writeBtree(businessBtree);
         // BusinessBtree businessBtree = new IOService().readBtree();
-        // new JsonService().initBusinessBtree("/Users/logan/coding/SUNY_Oswego/CSC-365/In_Class/Assignment3/yelp-app/yelp-dataset/business.json");
-
+        // new JsonService().initBusinessBtree("{SOURCE-PATH}/yelp-app/yelp-dataset/business.json");
     }
 }
 
