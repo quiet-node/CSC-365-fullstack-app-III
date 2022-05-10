@@ -8,6 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class D3GraphModel {
-    private List<D3Node> nodes;
-    private List<D3Link> links;
+    private List<D3NodeModel> nodes;
+    private List<D3LinkModel> links;
 }

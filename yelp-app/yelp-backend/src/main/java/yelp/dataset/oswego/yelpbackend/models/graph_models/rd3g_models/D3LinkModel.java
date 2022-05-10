@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class D3Node {
-    private long id;
+public class D3LinkModel {
+    private long source;
+    private long target;
 }
