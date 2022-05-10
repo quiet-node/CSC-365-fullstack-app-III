@@ -19,9 +19,6 @@ const Clusters = () => {
       const treeLayout: any = tree().size([height, width]);
       treeLayout(root);
 
-      console.log(root.descendants());
-      console.log(root.links());
-
       // links generator
       const linksGenerator: any = linkHorizontal()
         .x((node: any) => node.y)
