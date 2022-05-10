@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import yelp.dataset.oswego.yelpbackend.data_structure.dijkstra_graph.DijkstraGraph;
 import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedNode;
 import yelp.dataset.oswego.yelpbackend.models.business_models.BusinessModel;
 import yelp.dataset.oswego.yelpbackend.models.d3_models.BusinessD3RootModel;
@@ -108,12 +107,6 @@ public class BusinessController {
         return new ResponseEntity<>(new RestService().fetchConnectedComponents(), HttpStatus.OK);
     }
 
-    @GetMapping("/graph/fetch/{businessID}")
-    public ResponseEntity<String> fetchGraphByNodeID(@PathVariable int businessID) throws IOException{
-        new RestService().fetchGraphByGraphID(businessID);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @GetMapping("/graph/fetch/shortest-path/{sourceNodeID}/{destinationNodeID}")
     public ResponseEntity<ShortestPath> fetchShortestPath(@PathVariable int sourceNodeID, @PathVariable int destinationNodeID) throws IOException{
         return new ResponseEntity<>(new RestService().fetchShortestPath(sourceNodeID, destinationNodeID), HttpStatus.OK);
@@ -125,4 +118,9 @@ public class BusinessController {
         return new ResponseEntity<>("Successfully write to data store",HttpStatus.OK);
     }
 
+    @GetMapping("/graph/fetch/rd3g")
+    public ResponseEntity<String> fetchRd3gData() throws IOException{
+        new RestService().fetchRd3gData();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
