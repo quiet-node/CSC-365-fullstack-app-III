@@ -103,34 +103,15 @@ public class GraphService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
 
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
-        int count = 0;
-        long totalTime = 0;
-        int totalNodes = 0;
 
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
             if (connectedComponenet.getChildren().size() < 50) {
-                count +=1;
-                Instant before = Instant.now();
-                
                 DijkstraGraph dijkstraGraph = setUpDijkstraGraph(connectedComponenet.getRootID());
-                int nodesSize = dijkstraGraph.getNodes().size();
-                totalNodes += nodesSize;
-                
-                Instant after = Instant.now();
-                long differenceInMillis = Duration.between(before, after).toMillis();
-                long differenceInSeconds = Duration.between(before, after).toSeconds();
-                long differenceInMinutes = Duration.between(before, after).toMinutes();
-                long differenceInHours = Duration.between(before, after).toHours();
-                totalTime += differenceInMillis;
-    
-                System.out.println(count+ ". Disjoint set: " +connectedComponenet.getRootID()+ ". Total nodes: " +nodesSize+ " ---- " +differenceInMillis+ " millis ---- " +differenceInSeconds+ " seconds ---- " +differenceInMinutes+ " minutes ---- " +differenceInHours+ " hours.");
-                System.out.println();
                 
                 // write each dijkstra to disk 
                 new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
             }
         }
-        System.out.println("Total: " +count+ "disjoint sets, " +totalNodes+ " nodes --- took " +totalTime / 3600000+ " hours to finish");
     }
 
     /**
