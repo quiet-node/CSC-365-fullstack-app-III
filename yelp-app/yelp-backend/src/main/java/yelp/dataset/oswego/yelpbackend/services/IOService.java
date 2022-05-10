@@ -1,6 +1,7 @@
 package yelp.dataset.oswego.yelpbackend.services;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -161,7 +162,7 @@ public class IOService {
      * @param PATH
      * @throws IOException
      */
-    public void emptyFile(String PATH) throws IOException{
+    protected void emptyFile(String PATH) throws IOException{
         BufferedWriter writer = Files.newBufferedWriter(Paths.get(PATH));
         writer.write("");
         writer.flush();
@@ -195,5 +196,22 @@ public class IOService {
             return null;
         }
     }
+
+    /**
+     * get all the graph rootIDs
+     * @return
+     */
+    protected List<Long> fetchDijkstraRootIDs() {
+        File folder = new File(dijkstrasFilePath);
+        File[] files = folder.listFiles();
+        List<Long> dijkstraRootIDs = new ArrayList<>();
+
+        for (File file : files) {
+            String[] fileName = file.getName().split("\\.")[0].split("-");
+            dijkstraRootIDs.add(Long.parseLong(fileName[1]));
+        }
+        return dijkstraRootIDs;
+    }
+
 
 }
