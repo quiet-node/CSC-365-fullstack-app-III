@@ -27,10 +27,6 @@ const WeightedGraph = () => {
     },
   };
 
-  const onClickGraph = function (event: any) {
-    window.alert('Clicked the graph background');
-  };
-
   const onClickNode = function (nodeId: any, node: any) {
     window.alert('Clicked node ${nodeId} in position (${node.x}, ${node.y})');
   };
@@ -41,47 +37,18 @@ const WeightedGraph = () => {
     );
   };
 
-  const onRightClickNode = function (event: any, nodeId: any, node: any) {
-    window.alert(
-      'Right clicked node ${nodeId} in position (${node.x}, ${node.y})'
-    );
-  };
-
   const onMouseOverNode = function (nodeId: any, node: { x: any; y: any }) {
     window.alert(
       `Mouse over node ${nodeId} in position (${node.x}, ${node.y})`
     );
   };
 
-  const onMouseOutNode = function (nodeId: any, node: { x: any; y: any }) {
-    window.alert(`Mouse out node ${nodeId} in position (${node.x}, ${node.y})`);
-  };
-
-  const onClickLink = function (source: any, target: any) {
-    window.alert(`Clicked link between ${source} and ${target}`);
-  };
-
-  const onRightClickLink = function (event: any, source: any, target: any) {
-    window.alert('Right clicked link between ${source} and ${target}');
-  };
-
   const onMouseOverLink = function (source: any, target: any) {
     window.alert(`Mouse over in link between ${source} and ${target}`);
   };
 
-  const onMouseOutLink = function (source: any, target: any) {
-    window.alert(`Mouse out link between ${source} and ${target}`);
-  };
-
   const onNodePositionChange = function (nodeId: any, x: any, y: any) {
     window.alert(`Node ${nodeId} moved to new position x= ${x} y= ${y}`);
-  };
-
-  // Callback that's called whenever the graph is zoomed in/out
-  // @param {number} previousZoom the previous graph zoom
-  // @param {number} newZoom the new graph zoom
-  const onZoomChange = function (previousZoom: any, newZoom: any) {
-    window.alert(`Graph is now zoomed at ${newZoom} from ${previousZoom}`);
   };
 
   const [isLoading, setIsLoading] = useState(false);
@@ -106,24 +73,17 @@ const WeightedGraph = () => {
               </div>
             )}
           </div>
-          <Graph
-            id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-            data={data}
-            config={myConfig}
-            onClickGraph={onClickGraph}
-            // onClickNode={onClickNode}
-            // onDoubleClickNode={onDoubleClickNode}
-            // onRightClickNode={onRightClickNode}
-            onClickLink={onClickLink}
-            onRightClickLink={onRightClickLink}
-            // onMouseOverNode={onMouseOverNode}
-            // onMouseOutNode={onMouseOutNode}
-            onMouseOverLink={onMouseOverLink}
-            onMouseOutLink={onMouseOutLink}
-            onNodePositionChange={onNodePositionChange}
-            onZoomChange={onZoomChange}
-          />
-          ;
+          <div className='bg-black h-[600px] w-[1000px] first:bg-slate-50'>
+            <Graph
+              id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
+              data={data}
+              config={myConfig}
+              onClickNode={() => console.log(`Choose this node`)}
+              onDoubleClickNode={() => console.log(`Focus zoom to a node`)}
+              onMouseOverNode={() => console.log(`Show node information`)}
+              onMouseOverLink={() => console.log(`Show link information`)}
+            />
+          </div>
         </div>
       </div>
     </div>
