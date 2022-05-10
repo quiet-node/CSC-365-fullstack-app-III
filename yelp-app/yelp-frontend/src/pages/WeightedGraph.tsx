@@ -6,24 +6,49 @@ import { Graph } from 'react-d3-graph';
 const WeightedGraph = () => {
   // graph payload (with minimalist structure)
   const data = {
-    nodes: [{ id: 'Harry' }, { id: 'Sally' }, { id: 'Alice' }],
+    nodes: [
+      { id: '1' },
+      { id: '2' },
+      { id: '3' },
+      { id: '4' },
+      { id: '5' },
+      { id: '6' },
+      { id: '7' },
+      { id: '8' },
+    ],
     links: [
-      { source: 'Harry', target: 'Sally' },
-      { source: 'Harry', target: 'Alice' },
+      { source: '1', target: '2' },
+      { source: '2', target: '3' },
+      { source: '3', target: '4' },
+      { source: '4', target: '5' },
+      { source: '5', target: '6' },
+      { source: '6', target: '7' },
+      { source: '7', target: '8' },
     ],
   };
 
-  // the graph configuration, you only need to pass down properties
-  // that you want to override, otherwise default ones will be used
-  const myConfig = {
+  const graphConfig = {
     nodeHighlightBehavior: true,
+    height: 800,
+    width: 1000,
+    maxZoom: 5,
+    minZoom: 0.4,
+    d3: {
+      alphaTarget: 0.05,
+      gravity: -200,
+    },
     node: {
       color: 'lightgreen',
-      size: 120,
-      highlightStrokeColor: 'blue',
+      highlightStrokeColor: 'lightblue',
+      size: 150,
+      fontSize: 12,
+      highlightFontSize: 12,
+      fontWeight: 'bold',
+      highlightFontWeight: 'bold',
     },
     link: {
       highlightColor: 'lightblue',
+      strokeWidth: 2,
     },
   };
 
@@ -73,16 +98,19 @@ const WeightedGraph = () => {
               </div>
             )}
           </div>
-          <div className='bg-black h-[600px] w-[1000px] first:bg-slate-50'>
-            <Graph
-              id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-              data={data}
-              config={myConfig}
-              onClickNode={() => console.log(`Choose this node`)}
-              onDoubleClickNode={() => console.log(`Focus zoom to a node`)}
-              onMouseOverNode={() => console.log(`Show node information`)}
-              onMouseOverLink={() => console.log(`Show link information`)}
-            />
+          <div className='h-max-screen drop-shadow-xl bg-slate-50 flex justify-center flex-col rounded-xl m-8'>
+            <div className='text-center pt-5 pb-5'>YELP BUSINESS GRAPH</div>
+            <div className=' h-[800px] w-[1000px] '>
+              <Graph
+                id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
+                data={data}
+                config={graphConfig}
+                onClickNode={() => console.log(`Choose this node`)}
+                onDoubleClickNode={() => console.log(`Focus zoom to a node`)}
+                onMouseOverNode={() => console.log(`Show node information`)}
+                onMouseOverLink={() => console.log(`Show link information`)}
+              />
+            </div>
           </div>
         </div>
       </div>
