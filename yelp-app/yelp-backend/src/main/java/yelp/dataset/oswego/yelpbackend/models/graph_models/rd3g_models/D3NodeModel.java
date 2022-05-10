@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class D3NodeModel {
-    private long id;
+    private int id;
 }

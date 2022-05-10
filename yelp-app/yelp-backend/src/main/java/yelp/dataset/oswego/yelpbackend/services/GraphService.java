@@ -75,12 +75,12 @@ public class GraphService {
     }
 
     /**
-     * Function to set up graph to run dijkstra
+     * Initialize weighted graph
      * @param nodeID
      * @return
      * @throws IOException
      */
-    public DijkstraGraph setUpDijkstraGraph(int nodeID) throws IOException {
+    public DijkstraGraph initGraph(int nodeID) throws IOException {
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
 
@@ -92,6 +92,7 @@ public class GraphService {
         // a list of all the nodes prepare for the graph for dijkstra
         List<DijkstraNode> graphNodes = new ArrayList<>();
 
+        // Fill up graphNodes with new nodes using connectedNodeID
         for (int connectedNodeID : connectedComponent.getChildren()) {
             graphNodes.add(new DijkstraNode(connectedNodeID));
         }
@@ -118,12 +119,22 @@ public class GraphService {
 
         // Since each node needs to finish their full circle of adding-neighbors-process, it needs its own loop
         for (DijkstraNode node : graphNodes) graph.addNode(node);
+        
+        return graph;
+    }
 
+        /**
+     * Function to set up graph to run dijkstra
+     * @param nodeID
+     * @return
+     * @throws IOException
+     */
+    public DijkstraGraph getDijkstraGraph(int nodeID) throws IOException {
+        DijkstraGraph graph = initGraph(nodeID);
         // apply Dijkstra to the graph
         graph = new Dijkstra().calculateShortestPathFromSource(graph, graph.getNodeByNodeID(nodeID));
         return graph;
     }
-
 
     /**
      * Util method to check connectivity neighbors in each disjoint set

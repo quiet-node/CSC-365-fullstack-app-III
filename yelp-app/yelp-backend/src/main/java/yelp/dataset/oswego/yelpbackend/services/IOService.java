@@ -201,14 +201,14 @@ public class IOService {
      * get all the graph rootIDs
      * @return
      */
-    protected List<Long> fetchDijkstraRootIDs() {
+    protected List<Integer> fetchDijkstraRootIDs() {
         File folder = new File(dijkstrasFilePath);
         File[] files = folder.listFiles();
-        List<Long> dijkstraRootIDs = new ArrayList<>();
+        List<Integer> dijkstraRootIDs = new ArrayList<>();
 
         for (File file : files) {
             String[] fileName = file.getName().split("\\.")[0].split("-");
-            dijkstraRootIDs.add(Long.parseLong(fileName[1]));
+            dijkstraRootIDs.add(Integer.parseInt(fileName[1]));
         }
         return dijkstraRootIDs;
     }
