@@ -197,11 +197,27 @@ public class RestService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         if (disjointUnionSets.findDisjointSet(sourceNodeID) != disjointUnionSets.findDisjointSet(destinationNodeID))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Businesses are not connected"); 
+        
         DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
+
+        List<D3LinkModel> shortestPaths = new ArrayList<>();
+        List<Long> shortestPathNodes = new ArrayList<>();
+
         for (DijkstraNode node : dijkstraGraph.getNodes())
-                if (node.getNodeID() == destinationNodeID)
-                    return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
-        return null;
+            if (node.getNodeID() == destinationNodeID){
+                for (int i = 0; i <= node.getShortestPath().size(); i++) {
+                    if (i == node.getShortestPath().size()-1) {
+                        shortestPaths.add(new D3LinkModel(node.getShortestPath().get(i).getNodeID(), destinationNodeID));
+                        shortestPathNodes.add(node.getShortestPath().get(i).getNodeID());
+                        break;
+                    } else {
+                        shortestPaths.add(new D3LinkModel(node.getShortestPath().get(i).getNodeID(), node.getShortestPath().get(i+1).getNodeID()));
+                    }
+                    shortestPathNodes.add(node.getShortestPath().get(i).getNodeID());
+                }
+            }
+            shortestPathNodes.add((long)destinationNodeID);
+        return new ShortestPath(sourceNodeID, destinationNodeID, shortestPathNodes, shortestPaths);
     }
 
     /**
