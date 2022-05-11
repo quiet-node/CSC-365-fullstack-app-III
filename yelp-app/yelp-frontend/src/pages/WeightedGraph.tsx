@@ -16,6 +16,7 @@ const WeightedGraph = () => {
   const [graphData, setGraphData] = useState<any>();
   const [chosenNodeIds, setChosenNodeIds] = useState<String[]>([]);
   const [shortestPathNodes, setShortestPathNodes] = useState<String[]>([]);
+  const [shortestPaths, setshortestPaths] = useState<any>();
 
   const lockGraph = useCallback(() => {
     if (lock === 'Lock') {
@@ -39,16 +40,15 @@ const WeightedGraph = () => {
   };
 
   const findPath = async () => {
+    let shortestNodes: string[] = [];
     const res = await axios.get(
       `http://localhost:8080/yelpdata/graph/fetch/shortest-path/${chosenNodeIds[0]}/${chosenNodeIds[1]}`
     );
-    const shortestPathRes: string[] = res.data.shortestPath;
-    shortestPathRes.forEach((key: any) => {
-      shortestPathNodes.push(key.nodeID);
-    });
-    setShortestPathNodes(shortestPathNodes);
+    setshortestPaths(res.data.shortestPaths);
+    setShortestPathNodes(res.data.shortestPathNodes);
   };
   console.log(shortestPathNodes);
+  console.log(shortestPaths);
 
   const graphConfig: any = {
     nodeHighlightBehavior: true,
@@ -86,10 +86,11 @@ const WeightedGraph = () => {
 
   const onDoubleClickNode = (nodeId: any) => {
     if (chosenNodeIds.length >= 2) chosenNodeIds.length = 0;
-
     chosenNodeIds.push(nodeId);
     setChosenNodeIds(chosenNodeIds);
+    window.alert('added to array');
   };
+  console.log(chosenNodeIds);
 
   const onMouseOverNode = () => {
     // setIsStatic(true);
@@ -165,13 +166,13 @@ const WeightedGraph = () => {
                     <div className='flex flex-col'>
                       <div>
                         <button
-                          className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className='bg-indigo-500 mr-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
                           onClick={lockGraph}
                         >
                           {lock} graph
                         </button>
                         <button
-                          className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className='bg-indigo-500 ml-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
                           onClick={() => setIsReload(!isReload)}
                         >
                           Reform graph
@@ -179,13 +180,13 @@ const WeightedGraph = () => {
                       </div>
                       <div>
                         <button
-                          className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className='bg-indigo-500 mr-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
                           onClick={findPath}
                         >
                           Find Path
                         </button>
                         <button
-                          className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-1 mb-2 hover:bg-indigo-600'
+                          className='bg-indigo-500 ml-1 transition-all text-center w-36 rounded-md text-white mt-1 mb-2 hover:bg-indigo-600'
                           onClick={fetchGraphData}
                         >
                           Fetch new graph
