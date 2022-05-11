@@ -215,12 +215,12 @@ public class RestService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
 
-        List<D3NodeModel> d3Nodes = new ArrayList<>();
+        Set<D3NodeModel> d3Nodes = new HashSet<>();
         ConnectedComponenet connectedComponenet = new GraphService().getConnectedComponent(connectedComponenets, randomRootID);
         for(Integer child : connectedComponenet.getChildren()) 
         d3Nodes.add(new D3NodeModel(child));
 
-        List<D3LinkModel> D3links = new ArrayList<>();
+        Set<D3LinkModel> D3links = new HashSet<>();
         DijkstraGraph graph = new GraphService().initGraph(randomRootID);
         graph.getNodes().forEach(node -> {
             Long d3SourceID = node.getNodeID();
@@ -233,7 +233,4 @@ public class RestService {
 
         return new D3GraphModel(d3Nodes, D3links);
     }
-
-    
-
 }
