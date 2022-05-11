@@ -1,40 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ButtonLoader from '../components/ButtonLoader';
 import Header from '../components/Header';
 import { Graph } from 'react-d3-graph';
+import axios from 'axios';
 
 const WeightedGraph = () => {
-  const data: any = {
-    nodes: [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 },
-      { id: 4 },
-      { id: 5 },
-      { id: 6 },
-      { id: 7 },
-      { id: 8 },
-    ],
-    links: [
-      { source: 1, target: 2 },
-      { source: 2, target: 3 },
-      { source: 3, target: 4 },
-      { source: 4, target: 5 },
-      { source: 5, target: 6 },
-      { source: 6, target: 7 },
-      { source: 7, target: 8 },
-    ],
+  const [graphData, setGraphData] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isReady, setIsReady] = useState<boolean>();
+  const [isReload, setIsReload] = useState<boolean>();
+
+  const fetchGraphData = async () => {
+    setIsLoading(true);
+    const res = await axios.get(
+      'http://localhost:8080/yelpdata/graph/fetch/rd3g'
+    );
+    setGraphData(res.data);
+    setIsReady(true);
+    setIsLoading(false);
   };
+
+  useEffect(() => {}, [isReload]);
 
   const graphConfig: any = {
     nodeHighlightBehavior: true,
-    height: 800,
+    height: 620,
     width: 1000,
     maxZoom: 5,
     minZoom: 0.4,
+    focusZoom: 1.5,
+    focusedNodeId: 993,
     d3: {
-      alphaTarget: 0.05,
-      gravity: -200,
+      alphaTarget: 1,
+      gravity: -400,
     },
     node: {
       color: 'lightgreen',
@@ -42,8 +40,6 @@ const WeightedGraph = () => {
       size: 150,
       fontSize: 12,
       highlightFontSize: 12,
-      fontWeight: 'bold',
-      highlightFontWeight: 'bold',
       labelPosition: 'bottom',
     },
     link: {
@@ -76,40 +72,78 @@ const WeightedGraph = () => {
     window.alert(`Node ${nodeId} moved to new position x= ${x} y= ${y}`);
   };
 
-  const [isLoading, setIsLoading] = useState(false);
   return (
-    <div className='bg-slate-200 min-h-screen'>
-      <div className='flex w-full justify-center flex-col items-center h-full'>
-        <div className='w-full mb-8'>
-          <Header />
-        </div>
-        <div className='flex justify-center items-center w-full flex-col h-full overflow-auto '>
-          <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg drop-shadow-2xl '>
-            {isLoading ? (
-              <ButtonLoader />
+    <div>
+      <div className='bg-slate-200 min-h-screen'>
+        <div className='flex w-full justify-center flex-col items-center'>
+          <div className='flex justify-center items-center w-full flex-col overflow-auto '>
+            {isReady ? (
+              <div></div>
             ) : (
-              <div className='flex flex-col'>
-                <button
-                  onClick={() => setIsLoading(true)}
-                  className='cursor-pointer bg-indigo-500 px-10  shadow-2xl hover:drop-shadow-lg rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
-                >
-                  Fetch Random Graph
-                </button>
+              <div>
+                <div className='w-full mb-8'>
+                  <Header />
+                </div>
+                <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg drop-shadow-2xl '>
+                  {isLoading ? (
+                    <ButtonLoader />
+                  ) : (
+                    <div className='flex flex-col'>
+                      <button
+                        onClick={fetchGraphData}
+                        className='cursor-pointer transition-all bg-indigo-500 px-10  shadow-2xl hover:drop-shadow-lg rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
+                      >
+                        Fetch Random Graph
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
-          </div>
-          <div className='h-max-screen drop-shadow-xl bg-slate-50 flex justify-center flex-col rounded-xl m-8'>
-            <div className='text-center pt-5 pb-5'>YELP BUSINESS GRAPH</div>
-            <div className=' h-[800px] w-[1000px] '>
-              <Graph
-                id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-                data={data}
-                config={graphConfig}
-                onClickNode={() => console.log(`Choose this node`)}
-                onDoubleClickNode={() => console.log(`Focus zoom to a node`)}
-                onMouseOverNode={() => console.log(`Show node information`)}
-                onMouseOverLink={() => console.log(`Show link information`)}
-              />
+
+            <div>
+              {isReady ? (
+                <div className='h-[95vh] drop-shadow-xl bg-slate-50 flex justify-center flex-col rounded-xl m-4'>
+                  <div className='text-center pt-2 pb-2 font-semibold text-xl'>
+                    YELP BUSINESS GRAPH
+                  </div>
+                  <div className=' h-[800px] w-[1000px] '>
+                    <Graph
+                      id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
+                      data={graphData}
+                      config={graphConfig}
+                      onClickNode={() => console.log(`Choose this node`)}
+                      onDoubleClickNode={() =>
+                        console.log(`Focus zoom to a node`)
+                      }
+                      onMouseOverNode={() =>
+                        console.log(`Show node information`)
+                      }
+                      onMouseOverLink={() =>
+                        console.log(`Show link information`)
+                      }
+                    />
+                  </div>
+                  <div className='flex justify-center'>
+                    <div className='flex flex-col'>
+                      <button
+                        className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                        onClick={() => setIsReload(!isReload)}
+                      >
+                        Reform graph
+                      </button>
+                      <button
+                        className='bg-indigo-500 transition-all text-center w-36 rounded-md text-white mt-2 mb-2 hover:bg-indigo-600'
+                        onClick={fetchGraphData}
+                      >
+                        Fetch new graph
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className='mt-32'></div>
+              )}
             </div>
           </div>
         </div>
