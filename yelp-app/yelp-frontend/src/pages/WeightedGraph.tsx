@@ -9,14 +9,15 @@ import { LOCK } from '../types/interfaces';
 const WeightedGraph = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReady, setIsReady] = useState<boolean>();
+  const [isShortestPathReady, setIsShortestPathReady] = useState<boolean>();
   const [isReload, setIsReload] = useState<boolean>();
   const [isStatic, setIsStatic] = useState<boolean>(false);
   const [lock, setLock] = useState<LOCK>('Lock');
 
   const [graphData, setGraphData] = useState<any>();
   const [chosenNodeIds, setChosenNodeIds] = useState<String[]>([]);
-  const [shortestPathNodes, setShortestPathNodes] = useState<String[]>([]);
-  const [shortestPaths, setshortestPaths] = useState<any>();
+  const [shortestPathLinks, setShortestPathLinks] = useState<any>();
+  const [shortestPathNodes, setShortestPathNodes] = useState<any>();
 
   const lockGraph = useCallback(() => {
     if (lock === 'Lock') {
@@ -37,18 +38,34 @@ const WeightedGraph = () => {
     setGraphData(res.data);
     setIsReady(true);
     setIsLoading(false);
+    setIsShortestPathReady(false);
   };
 
   const findPath = async () => {
-    let shortestNodes: string[] = [];
+    if (chosenNodeIds.length < 2) {
+      const alert = `Please pick two nodes to process this request.\nCurrent chosen node IDs= [${
+        chosenNodeIds.length == 0 ? '' : chosenNodeIds[0]
+      }]`;
+      window.alert(alert);
+      return;
+    }
+    if (!isStatic) {
+      window.alert('Please lock your graph to process this request.');
+      return;
+    }
+    setIsShortestPathReady(false);
     const res = await axios.get(
       `http://localhost:8080/yelpdata/graph/fetch/shortest-path/${chosenNodeIds[0]}/${chosenNodeIds[1]}`
     );
-    setshortestPaths(res.data.shortestPaths);
+    setShortestPathLinks(res.data.shortestPaths);
     setShortestPathNodes(res.data.shortestPathNodes);
+    setIsShortestPathReady(true);
   };
-  console.log(shortestPathNodes);
-  console.log(shortestPaths);
+
+  const shortestPathGraphData: any = {
+    nodes: shortestPathNodes,
+    links: shortestPathLinks,
+  };
 
   const graphConfig: any = {
     nodeHighlightBehavior: true,
@@ -79,6 +96,33 @@ const WeightedGraph = () => {
       strokeLinecap: 'butt',
     },
   };
+  const graphConfig2: any = {
+    nodeHighlightBehavior: true,
+    linkHighlightBehavior: true,
+    height: 400,
+    width: 350,
+    maxZoom: 5,
+    minZoom: 0.4,
+    d3: {
+      alphaTarget: 0,
+      gravity: -400,
+    },
+    node: {
+      color: 'lightgreen',
+      highlightStrokeColor: 'lightblue',
+      size: 150,
+      fontSize: 12,
+      highlightFontSize: 12,
+      labelPosition: 'bottom',
+      mouseCursor: 'grab',
+    },
+    link: {
+      highlightColor: 'lightblue',
+      strokeWidth: 2,
+      semanticStrokeWidth: true,
+      strokeLinecap: 'butt',
+    },
+  };
 
   const onClickNode = (nodeId: string) => {
     // setChosenNodeId(nodeId);
@@ -88,23 +132,19 @@ const WeightedGraph = () => {
     if (chosenNodeIds.length >= 2) chosenNodeIds.length = 0;
     chosenNodeIds.push(nodeId);
     setChosenNodeIds(chosenNodeIds);
-    window.alert('added to array');
-  };
-  console.log(chosenNodeIds);
-
-  const onMouseOverNode = () => {
-    // setIsStatic(true);
-  };
-  const onMouseOutNode = () => {
-    // setIsStatic(false);
+    window.alert(
+      `Added node to chosenNodeIds.\nchosen node IDs=[${
+        chosenNodeIds.length == 1
+          ? chosenNodeIds[0]
+          : `${chosenNodeIds[0]}, ${chosenNodeIds[1]}`
+      }]`
+    );
   };
 
+  const onMouseOverNode = () => {};
+  const onMouseOutNode = () => {};
   const onMouseOverLink = function (source: any, target: any) {
     window.alert(`Mouse over in link between ${source} and ${target}`);
-  };
-
-  const onNodePositionChange = function (nodeId: any, x: any, y: any) {
-    window.alert(`Node ${nodeId} moved to new position x= ${x} y= ${y}`);
   };
 
   return (
@@ -149,16 +189,30 @@ const WeightedGraph = () => {
                       </div>
                     ) : (
                       <div>
-                        <Graph
-                          id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-                          data={graphData}
-                          config={graphConfig}
-                          onClickNode={onClickNode}
-                          onDoubleClickNode={onDoubleClickNode}
-                          onMouseOverNode={onMouseOverNode}
-                          onMouseOutNode={onMouseOutNode}
-                          // onMouseOverLink={() => console.log(`Show link information`)}
-                        />
+                        <div className='relative z-0'>
+                          <Graph
+                            id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
+                            data={graphData}
+                            config={graphConfig}
+                            onClickNode={onClickNode}
+                            onDoubleClickNode={onDoubleClickNode}
+                            onMouseOverNode={onMouseOverNode}
+                            onMouseOutNode={onMouseOutNode}
+                          />
+                        </div>
+                        <div className='absolute bottom-0 left-0'>
+                          {isShortestPathReady ? (
+                            <div className='z-10'>
+                              <Graph
+                                id='shortest-path-id'
+                                data={shortestPathGraphData}
+                                config={graphConfig2}
+                              />
+                            </div>
+                          ) : (
+                            <div></div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
