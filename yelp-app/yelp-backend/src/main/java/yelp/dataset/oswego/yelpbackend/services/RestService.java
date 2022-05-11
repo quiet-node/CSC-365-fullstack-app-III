@@ -163,11 +163,13 @@ public class RestService {
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
 
         for (ConnectedComponenet connectedComponenet : connectedComponenets) {
-            if (connectedComponenet.getChildren().size() < 50) {
-                DijkstraGraph dijkstraGraph = new GraphService().getDijkstraGraph(connectedComponenet.getRootID());
-
-                // write each dijkstra to disk 
-                new IOService().writeDijkstraGraph(dijkstraGraph, connectedComponenet.getRootID());
+            if (connectedComponenet.getChildren().size() < 20) {
+                for(int nodeID : connectedComponenet.getChildren()){
+                    DijkstraGraph dijkstraGraph = new GraphService().getDijkstraGraph(nodeID);
+                    // write each dijkstra to disk
+                    new IOService().writeDijkstraGraph(dijkstraGraph, nodeID);
+                    // System.out.println(nodeID);
+                }
             }
         }
     }
@@ -195,10 +197,10 @@ public class RestService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         if (disjointUnionSets.findDisjointSet(sourceNodeID) != disjointUnionSets.findDisjointSet(destinationNodeID))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Businesses are not connected"); 
-        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
+        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(disjointUnionSets.findDisjointSet(sourceNodeID));
         for (DijkstraNode node : dijkstraGraph.getNodes())
-            if (node.getNodeID() == destinationNodeID)
-                return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
+                if (node.getNodeID() == destinationNodeID)
+                    return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
         return null;
     }
 
