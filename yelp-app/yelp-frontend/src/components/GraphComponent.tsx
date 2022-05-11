@@ -3,9 +3,10 @@ import { Graph } from 'react-d3-graph';
 
 interface Props {
   graphData: any;
+  isStatic: boolean;
 }
 
-const GraphComponent = ({ graphData }: Props): JSX.Element => {
+const GraphComponent = ({ graphData, isStatic }: Props): JSX.Element => {
   const [chosenNodeId, setChosenNodeId] = useState<string>('0');
 
   const graphConfig: any = {
@@ -15,8 +16,8 @@ const GraphComponent = ({ graphData }: Props): JSX.Element => {
     width: 1000,
     maxZoom: 5,
     minZoom: 0.4,
-    initialZoom: 1.2,
     highlightOpacity: 0.3,
+    staticGraph: isStatic,
     d3: {
       alphaTarget: 0,
       gravity: -400,
@@ -38,21 +39,21 @@ const GraphComponent = ({ graphData }: Props): JSX.Element => {
     },
   };
 
-  const onClickNode = useCallback(
-    (nodeId: string) => {
-      setChosenNodeId(nodeId);
-    },
-    [chosenNodeId]
-  );
+  const onClickNode = (nodeId: string) => {
+    setChosenNodeId(nodeId);
+  };
+  console.log(chosenNodeId);
 
   const onDoubleClickNode = (nodeId: any) => {
-    window.alert('double');
+    // setIsStatic(!isStatic);
   };
+  console.log(isStatic);
 
-  const onMouseOverNode = function (nodeId: any, node: { x: any; y: any }) {
-    window.alert(
-      `Mouse over node ${nodeId} in position (${node.x}, ${node.y})`
-    );
+  const onMouseOverNode = () => {
+    // setIsStatic(true);
+  };
+  const onMouseOutNode = () => {
+    // setIsStatic(false);
   };
 
   const onMouseOverLink = function (source: any, target: any) {
@@ -70,8 +71,9 @@ const GraphComponent = ({ graphData }: Props): JSX.Element => {
         config={graphConfig}
         onClickNode={onClickNode}
         onDoubleClickNode={onDoubleClickNode}
-        onMouseOverNode={() => console.log(`Show node information`)}
-        onMouseOverLink={() => console.log(`Show link information`)}
+        onMouseOverNode={onMouseOverNode}
+        onMouseOutNode={onMouseOutNode}
+        // onMouseOverLink={() => console.log(`Show link information`)}
       />
     </div>
   );

@@ -12,3 +12,5 @@ export interface IBusiness {
 export interface IBusinessList {
   bList: Array<IBusiness>;
 }
+
+export type LOCK = 'Lock' | 'Unlock';
