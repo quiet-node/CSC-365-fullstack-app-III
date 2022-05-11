@@ -201,22 +201,22 @@ public class RestService {
         DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
 
         List<D3LinkModel> shortestPaths = new ArrayList<>();
-        List<Long> shortestPathNodes = new ArrayList<>();
+        List<D3NodeModel> shortestPathNodes = new ArrayList<>();
 
         for (DijkstraNode node : dijkstraGraph.getNodes())
             if (node.getNodeID() == destinationNodeID){
                 for (int i = 0; i <= node.getShortestPath().size(); i++) {
                     if (i == node.getShortestPath().size()-1) {
                         shortestPaths.add(new D3LinkModel(node.getShortestPath().get(i).getNodeID(), destinationNodeID));
-                        shortestPathNodes.add(node.getShortestPath().get(i).getNodeID());
+                        shortestPathNodes.add(new D3NodeModel(node.getShortestPath().get(i).getNodeID().intValue()));
                         break;
                     } else {
                         shortestPaths.add(new D3LinkModel(node.getShortestPath().get(i).getNodeID(), node.getShortestPath().get(i+1).getNodeID()));
                     }
-                    shortestPathNodes.add(node.getShortestPath().get(i).getNodeID());
+                    shortestPathNodes.add(new D3NodeModel(node.getShortestPath().get(i).getNodeID().intValue()));
                 }
             }
-            shortestPathNodes.add((long)destinationNodeID);
+            shortestPathNodes.add(new D3NodeModel(destinationNodeID));
         return new ShortestPath(sourceNodeID, destinationNodeID, shortestPathNodes, shortestPaths);
     }
 
