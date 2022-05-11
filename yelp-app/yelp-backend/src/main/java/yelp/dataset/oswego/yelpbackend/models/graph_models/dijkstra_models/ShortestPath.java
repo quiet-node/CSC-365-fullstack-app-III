@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import yelp.dataset.oswego.yelpbackend.models.graph_models.rd3g_models.D3LinkModel;
 
 /**
  * @author: Nam (Logan) Nguyen
@@ -19,5 +20,6 @@ import lombok.Data;
 public class ShortestPath implements Serializable {
     private int sourceNodeID;
     private int destinationNodeID;
-    private List<ShortestNode> shortestPath;
+    private List<Long> shortestPathNodes;
+    private List<D3LinkModel> shortestPaths;
 }
