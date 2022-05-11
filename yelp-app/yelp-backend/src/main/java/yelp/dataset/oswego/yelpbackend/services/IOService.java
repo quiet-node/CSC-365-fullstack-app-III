@@ -15,7 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.NoArgsConstructor;
 import yelp.dataset.oswego.yelpbackend.data_structure.b_tree.BusinessBtree;
@@ -201,10 +203,10 @@ public class IOService {
      * get all the graph rootIDs
      * @return
      */
-    protected List<Integer> fetchDijkstraRootIDs() {
+    protected Set<Integer> fetchDijkstraRootIDs() {
         File folder = new File(dijkstrasFilePath);
         File[] files = folder.listFiles();
-        List<Integer> dijkstraRootIDs = new ArrayList<>();
+        Set<Integer> dijkstraRootIDs = new HashSet<>();
 
         for (File file : files) {
             String[] fileName = file.getName().split("\\.")[0].split("-");

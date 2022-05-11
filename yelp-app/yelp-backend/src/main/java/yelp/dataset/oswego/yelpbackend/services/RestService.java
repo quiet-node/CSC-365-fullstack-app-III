@@ -210,12 +210,12 @@ public class RestService {
      * @throws IOException
      */
     public D3GraphModel fetchRd3gData() throws IOException {
-        List<Integer> rootIDs = new IOService().fetchDijkstraRootIDs();
-        Integer randomRootID = rootIDs.get(new Random().nextInt(rootIDs.size()));
-
         List<WeightedNode> nearestNodeModels = new IOService().readNearestNodesList();
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
+
+        List<Integer> rootIDs = new ArrayList<>(new IOService().fetchDijkstraRootIDs());
+        Integer randomRootID = rootIDs.get(new Random().nextInt(rootIDs.size()));
 
         Set<D3NodeModel> d3Nodes = new HashSet<>();
         ConnectedComponenet connectedComponenet = new GraphService().getConnectedComponent(connectedComponenets, randomRootID);
