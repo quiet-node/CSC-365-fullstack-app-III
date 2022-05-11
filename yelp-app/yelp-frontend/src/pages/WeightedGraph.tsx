@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ButtonLoader from '../components/ButtonLoader';
 import Header from '../components/Header';
 import { Graph } from 'react-d3-graph';
 import axios from 'axios';
+import Loader from '../components/Loader';
+import GraphComponent from '../components/GraphComponent';
 
 const WeightedGraph = () => {
-  const [graphData, setGraphData] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [isReady, setIsReady] = useState<boolean>();
   const [isReload, setIsReload] = useState<boolean>();
+  const [isStatic, setIsStatic] = useState<boolean>();
+
+  const [graphData, setGraphData] = useState<any>();
 
   const fetchGraphData = async () => {
     setIsLoading(true);
@@ -18,58 +22,6 @@ const WeightedGraph = () => {
     setGraphData(res.data);
     setIsReady(true);
     setIsLoading(false);
-  };
-
-  useEffect(() => {}, [isReload]);
-
-  const graphConfig: any = {
-    nodeHighlightBehavior: true,
-    height: 620,
-    width: 1000,
-    maxZoom: 5,
-    minZoom: 0.4,
-    focusZoom: 1.5,
-    focusedNodeId: 993,
-    d3: {
-      alphaTarget: 1,
-      gravity: -400,
-    },
-    node: {
-      color: 'lightgreen',
-      highlightStrokeColor: 'lightblue',
-      size: 150,
-      fontSize: 12,
-      highlightFontSize: 12,
-      labelPosition: 'bottom',
-    },
-    link: {
-      highlightColor: 'lightblue',
-      strokeWidth: 2,
-    },
-  };
-
-  const onClickNode = function (nodeId: any, node: any) {
-    window.alert('Clicked node ${nodeId} in position (${node.x}, ${node.y})');
-  };
-
-  const onDoubleClickNode = function (nodeId: any, node: any) {
-    window.alert(
-      'Double clicked node ${nodeId} in position (${node.x}, ${node.y})'
-    );
-  };
-
-  const onMouseOverNode = function (nodeId: any, node: { x: any; y: any }) {
-    window.alert(
-      `Mouse over node ${nodeId} in position (${node.x}, ${node.y})`
-    );
-  };
-
-  const onMouseOverLink = function (source: any, target: any) {
-    window.alert(`Mouse over in link between ${source} and ${target}`);
-  };
-
-  const onNodePositionChange = function (nodeId: any, x: any, y: any) {
-    window.alert(`Node ${nodeId} moved to new position x= ${x} y= ${y}`);
   };
 
   return (
@@ -107,22 +59,16 @@ const WeightedGraph = () => {
                   <div className='text-center pt-2 pb-2 font-semibold text-xl'>
                     YELP BUSINESS GRAPH
                   </div>
-                  <div className=' h-[800px] w-[1000px] '>
-                    <Graph
-                      id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
-                      data={graphData}
-                      config={graphConfig}
-                      onClickNode={() => console.log(`Choose this node`)}
-                      onDoubleClickNode={() =>
-                        console.log(`Focus zoom to a node`)
-                      }
-                      onMouseOverNode={() =>
-                        console.log(`Show node information`)
-                      }
-                      onMouseOverLink={() =>
-                        console.log(`Show link information`)
-                      }
-                    />
+                  <div className=' h-[800px] w-[1000px] transition-all'>
+                    {isLoading ? (
+                      <div className='h-full flex justify-center'>
+                        <Loader />
+                      </div>
+                    ) : (
+                      <div>
+                        <GraphComponent graphData={graphData} />
+                      </div>
+                    )}
                   </div>
                   <div className='flex justify-center'>
                     <div className='flex flex-col'>
