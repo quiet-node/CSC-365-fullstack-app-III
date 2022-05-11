@@ -209,8 +209,10 @@ public class IOService {
         Set<Integer> dijkstraRootIDs = new HashSet<>();
 
         for (File file : files) {
-            String[] fileName = file.getName().split("\\.")[0].split("-");
-            dijkstraRootIDs.add(Integer.parseInt(fileName[1]));
+            if (!file.getName().equals("README.md")) {
+                String[] fileName = file.getName().split("\\.")[0].split("-");
+                dijkstraRootIDs.add(Integer.parseInt(fileName[1]));
+            }
         }
         return dijkstraRootIDs;
     }

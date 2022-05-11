@@ -197,7 +197,7 @@ public class RestService {
         DisjointUnionSets disjointUnionSets = new GraphService().setUpDisjoinSets(nearestNodeModels);
         if (disjointUnionSets.findDisjointSet(sourceNodeID) != disjointUnionSets.findDisjointSet(destinationNodeID))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Businesses are not connected"); 
-        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(disjointUnionSets.findDisjointSet(sourceNodeID));
+        DijkstraGraph dijkstraGraph = new IOService().readDijkstraGraph(sourceNodeID);
         for (DijkstraNode node : dijkstraGraph.getNodes())
                 if (node.getNodeID() == destinationNodeID)
                     return new ShortestPath(sourceNodeID, destinationNodeID, node.getShortestPath());
@@ -215,12 +215,12 @@ public class RestService {
         List<ConnectedComponenet> connectedComponenets = new GraphService().fetchConnectedComponents(nearestNodeModels, disjointUnionSets);
 
         List<Integer> rootIDs = new ArrayList<>(new IOService().fetchDijkstraRootIDs());
-        Integer randomRootID = rootIDs.get(new Random().nextInt(rootIDs.size()));
+        int randomRootID = disjointUnionSets.findDisjointSet(rootIDs.get(new Random().nextInt(rootIDs.size())));
 
         Set<D3NodeModel> d3Nodes = new HashSet<>();
         ConnectedComponenet connectedComponenet = new GraphService().getConnectedComponent(connectedComponenets, randomRootID);
         for(Integer child : connectedComponenet.getChildren()) 
-        d3Nodes.add(new D3NodeModel(child));
+            d3Nodes.add(new D3NodeModel(child));
 
         Set<D3LinkModel> D3links = new HashSet<>();
         DijkstraGraph graph = new GraphService().initGraph(randomRootID);
