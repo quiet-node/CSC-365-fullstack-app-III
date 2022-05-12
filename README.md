@@ -11,9 +11,14 @@
   
 
 ## Project Showcase
-### Dijkstra Shortest Path showcase
 
 ### React D3 Graph showcase
+https://user-images.githubusercontent.com/66233296/168176621-e0f63324-40eb-44f0-b209-ca20fc73fac1.mp4
+
+
+### Dijkstra Shortest Path showcase
+https://user-images.githubusercontent.com/66233296/168176857-7b2f864e-3db9-4402-8ddd-95fb7983dbb2.mp4
+
 
 
 ## Technologies:
@@ -43,6 +48,7 @@
   - [MST and Kraskal's Algorithm -- cp-algo](https://cp-algorithms.com/graph/mst_kruskal_with_dsu.html)
   - [Haversine implementation -- geeksforgeeks](https://www.geeksforgeeks.org/haversine-formula-to-find-distance-between-two-points-on-a-sphere/)
   - [Dijkstra's algorithm](https://www.baeldung.com/java-dijkstra)
+  - [React D3 Graph](https://github.com/danielcaldas/react-d3-graph)
 
 ### Version 2.0
   - [Yelp Dataset -- yelp](https://www.yelp.com/dataset)
