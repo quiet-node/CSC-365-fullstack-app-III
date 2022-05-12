@@ -30,11 +30,13 @@ https://user-images.githubusercontent.com/66233296/168176857-7b2f864e-3db9-4402-
   - Customized HashTable
   - Cosine Similarity
   - MySql Database / Docker image
+  - Haversine formula
+  - Graph theory (Dijkstra's algorithm, Union-Find Disjoint Set, Weighted Graph)
 
 
 ### Frontend -- client
   - Vite/React--TypeScript
-  - D3.js (Data-driven document)
+  - React D3 Graph
   - Tailwindcss
   - Material-UI
 
