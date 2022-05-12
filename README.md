@@ -51,5 +51,5 @@ In development...
   - [D3 -- Data-driven Document](https://observablehq.com/@d3/d3-hierarchy?collection=@d3/d3-hierarchy)
 
 ### Version 1.0
-  - ...
-  
+  - [Yelp Dataset](https://www.yelp.com/dataset)
+  - [Cosine Similarity](https://www.machinelearningplus.com/nlp/cosine-similarity/)
