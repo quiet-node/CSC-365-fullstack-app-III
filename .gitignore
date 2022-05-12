@@ -6,3 +6,5 @@ yelp-app/yelp-datastore-files/.DS_Store
 yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin
 yelp-app/yelp-dataset/*.json
 yelp-app/yelp-datastore-files/business-dijkstras/*.bin
+.DS_Store
+

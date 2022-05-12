@@ -105,14 +105,14 @@ const Clusters = () => {
           <Header />
         </div>
         <div className='flex justify-center items-center w-full flex-col h-full overflow-auto '>
-          <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg drop-shadow-2xl'>
+          <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg'>
             {isLoading ? (
               <ButtonLoader />
             ) : (
               <div className='flex flex-col'>
                 <button
                   onClick={updateClusters}
-                  className='cursor-pointer bg-indigo-500 px-10  shadow-2xl hover:drop-shadow-lg rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
+                  className='cursor-pointer bg-indigo-500 px-10 shadow-2xl rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
                 >
                   Fetch Random Clusters
                 </button>

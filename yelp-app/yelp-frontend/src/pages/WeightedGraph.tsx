@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loader from '../components/Loader';
 import { Graph } from 'react-d3-graph';
 import { LOCK } from '../types/interfaces';
+import GraphLoader from '../components/GraphLoader';
 
 const WeightedGraph = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +35,7 @@ const WeightedGraph = () => {
     setLock('Lock');
     setIsStatic(false);
     setIsLoading(true);
+    chosenNodeIds.length = 0;
     const res = await axios.get(
       'http://localhost:8080/yelpdata/graph/fetch/rd3g'
     );
@@ -72,7 +74,7 @@ const WeightedGraph = () => {
   const graphConfig: any = {
     nodeHighlightBehavior: true,
     linkHighlightBehavior: true,
-    height: 600,
+    height: 800,
     width: 1000,
     maxZoom: 5,
     minZoom: 0.4,
@@ -84,6 +86,7 @@ const WeightedGraph = () => {
     },
     node: {
       color: 'lightgreen',
+      fontColor: '#e5e7eb',
       highlightStrokeColor: 'lightblue',
       size: 150,
       fontSize: 12,
@@ -101,7 +104,7 @@ const WeightedGraph = () => {
   const graphConfig2: any = {
     nodeHighlightBehavior: true,
     linkHighlightBehavior: true,
-    height: 400,
+    height: 350,
     width: 350,
     maxZoom: 5,
     minZoom: 0.4,
@@ -112,6 +115,7 @@ const WeightedGraph = () => {
     node: {
       color: 'lightgreen',
       highlightStrokeColor: 'lightblue',
+      fontColor: '#e5e7eb',
       size: 150,
       fontSize: 12,
       highlightFontSize: 12,
@@ -126,16 +130,12 @@ const WeightedGraph = () => {
     },
   };
 
-  const onClickNode = (nodeId: string) => {
-    // setChosenNodeId(nodeId);
-  };
-
   const onDoubleClickNode = (nodeId: any) => {
     if (chosenNodeIds.length >= 2) chosenNodeIds.length = 0;
     chosenNodeIds.push(nodeId);
     setChosenNodeIds(chosenNodeIds);
     window.alert(
-      `Added node to chosenNodeIds.\nchosen node IDs=[source: ${
+      `Added node to chosenNodeIds array.\nchosen node IDs=[source: ${
         chosenNodeIds.length == 1
           ? chosenNodeIds[0]
           : `${chosenNodeIds[0]}, target: ${chosenNodeIds[1]}`
@@ -143,17 +143,11 @@ const WeightedGraph = () => {
     );
   };
 
-  const onMouseOverNode = () => {};
-  const onMouseOutNode = () => {};
-  const onMouseOverLink = function (source: any, target: any) {
-    window.alert(`Mouse over in link between ${source} and ${target}`);
-  };
-
   return (
     <div>
       <div className='bg-slate-200 min-h-screen'>
         <div className='flex w-full justify-center flex-col items-center'>
-          <div className='flex justify-center items-center w-full flex-col overflow-auto '>
+          <div className='flex justify-center items-center w-full flex-col '>
             {isReady ? (
               <div></div>
             ) : (
@@ -161,14 +155,14 @@ const WeightedGraph = () => {
                 <div className='w-full mb-8'>
                   <Header />
                 </div>
-                <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg drop-shadow-2xl '>
+                <div className='bg-white h-24 flex justify-center items-center w-[750px] rounded-lg shadow-lg '>
                   {isLoading ? (
                     <ButtonLoader />
                   ) : (
                     <div className='flex flex-col'>
                       <button
                         onClick={fetchGraphData}
-                        className='cursor-pointer transition-all bg-indigo-500 px-10  shadow-2xl hover:drop-shadow-lg rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
+                        className='cursor-pointer transition-all bg-indigo-500 px-10 hover:drop-shadow-lg rounded-xl py-2 font-bold text-white hover:bg-indigo-600'
                       >
                         Fetch Random Graph
                       </button>
@@ -178,38 +172,38 @@ const WeightedGraph = () => {
               </div>
             )}
 
-            <div>
+            <div className='m-4 relative'>
               {isReady ? (
-                <div className='h-[95vh] drop-shadow-xl bg-slate-50 flex justify-center flex-col rounded-xl m-4'>
-                  <div className='text-center pt-2 pb-2 font-semibold text-xl'>
+                <div className='h-[95vh] shadow-md bg-slate-400 flex justify-center flex-col rounded-xl '>
+                  <div className='text-center pt-2 pb-2 font-semibold text-xl text-slate-200'>
                     YELP BUSINESS GRAPH
                   </div>
                   <div className=' h-[800px] w-[1000px] transition-all'>
                     {isLoading ? (
-                      <div className='h-full flex justify-center'>
-                        <Loader />
+                      <div className='h-full flex justify-center align-center'>
+                        <GraphLoader />
                       </div>
                     ) : (
-                      <div>
-                        <div className='relative z-0'>
+                      <div className=''>
+                        <div className='z-0'>
                           <Graph
                             id='graph-id' // id is mandatory, if no id is defined rd3g will throw an error
                             data={graphData}
                             config={graphConfig}
-                            onClickNode={onClickNode}
                             onDoubleClickNode={onDoubleClickNode}
-                            onMouseOverNode={onMouseOverNode}
-                            onMouseOutNode={onMouseOutNode}
                           />
                         </div>
-                        <div className='absolute bottom-0 left-0'>
+                        <div>
                           {isShortestPathReady ? (
-                            <div className='z-10'>
+                            <div className='w-[330px] h-[400px] absolute bottom-0 left-0'>
                               <Graph
                                 id='shortest-path-id'
                                 data={shortestPathGraphData}
                                 config={graphConfig2}
                               />
+                              <div className='text-slate-200 text-center'>
+                                Dijkstra Shortest Path
+                              </div>
                             </div>
                           ) : (
                             <div></div>
@@ -219,16 +213,16 @@ const WeightedGraph = () => {
                     )}
                   </div>
                   <div className='flex justify-center'>
-                    <div className='flex flex-col'>
+                    <div className='flex flex-col p-2 mb-2 rounded-xl'>
                       <div>
                         <button
-                          className='bg-indigo-500 mr-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className='mr-1 transition-all text-center w-36 rounded-md hover:bg-slate-200 hover:text-indigo-600 bg-slate-100 text-indigo-500'
                           onClick={lockGraph}
                         >
                           {lock} graph
                         </button>
                         <button
-                          className='bg-indigo-500 ml-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className=' ml-1 transition-all text-center w-36 rounded-md mt-1 hover:bg-slate-200 hover:text-indigo-600 bg-slate-100 text-indigo-500'
                           onClick={() => setIsReload(!isReload)}
                         >
                           Reform graph
@@ -236,13 +230,13 @@ const WeightedGraph = () => {
                       </div>
                       <div>
                         <button
-                          className='bg-indigo-500 mr-1 transition-all text-center w-36 rounded-md text-white mt-1 hover:bg-indigo-600'
+                          className=' mr-1 transition-all text-center w-36 rounded-md mt-1 hover:bg-slate-200 hover:text-indigo-600 bg-slate-100 text-indigo-500'
                           onClick={findPath}
                         >
                           Find Path
                         </button>
                         <button
-                          className='bg-indigo-500 ml-1 transition-all text-center w-36 rounded-md text-white mt-1 mb-2 hover:bg-indigo-600'
+                          className=' ml-1 transition-all text-center w-36 rounded-md mt-1 hover:bg-slate-200 hover:text-indigo-600 bg-slate-100 text-indigo-500'
                           onClick={fetchGraphData}
                         >
                           Fetch new graph
