@@ -35,10 +35,10 @@ import yelp.dataset.oswego.yelpbackend.data_structure.weighted_graph.WeightedEdg
 
 @NoArgsConstructor
 public class IOService {
-    private final String bTreeFile = System.getProperty("user.dir") + "/yelp-datastore-files/business-btree/btree.bin";
-    private final String neareastNodeFile = System.getProperty("user.dir") + "/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin";
-    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-datastore-files/business-nodes";
-    private final String dijkstrasFilePath = System.getProperty("user.dir") + "/yelp-datastore-files/business-dijkstras";
+    private final String bTreeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-btree/btree.bin";
+    private final String neareastNodeFile = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nearest-node-list/nearestNodeList.bin";
+    private final String edgesFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-nodes";
+    private final String dijkstrasFilePath = System.getProperty("user.dir") + "/yelp-app/yelp-datastore-files/business-dijkstras";
 
     /**
      * A function to write a whole Btree to disk

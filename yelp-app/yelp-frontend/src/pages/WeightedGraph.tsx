@@ -21,8 +21,10 @@ const WeightedGraph = () => {
 
   const lockGraph = useCallback(() => {
     if (lock === 'Lock') {
+      window.alert('Graph locked.');
       setLock('Unlock');
     } else {
+      window.alert('Graph unlocked.');
       setLock('Lock');
     }
     setIsStatic(!isStatic);
@@ -133,10 +135,10 @@ const WeightedGraph = () => {
     chosenNodeIds.push(nodeId);
     setChosenNodeIds(chosenNodeIds);
     window.alert(
-      `Added node to chosenNodeIds.\nchosen node IDs=[${
+      `Added node to chosenNodeIds.\nchosen node IDs=[source: ${
         chosenNodeIds.length == 1
           ? chosenNodeIds[0]
-          : `${chosenNodeIds[0]}, ${chosenNodeIds[1]}`
+          : `${chosenNodeIds[0]}, target: ${chosenNodeIds[1]}`
       }]`
     );
   };
