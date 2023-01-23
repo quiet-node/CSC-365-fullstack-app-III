@@ -9,7 +9,6 @@
 
   - This new extended version 3.0 applies graph theory to form up graphs based on geographical distances, and utilize Dijkstra's alogorithm to find the shortest path (weighted by similarity rate) between two chosen nodes in the graph.
   
-
 ## Project Showcase
 
 ### React D3 Graph showcase
